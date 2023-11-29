@@ -10,7 +10,7 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { ellipse, square, triangle } from 'ionicons/icons';
+import { addCircle, ellipse, home, menu, person, square, triangle } from 'ionicons/icons';
 import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
@@ -33,44 +33,66 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import 'swiper/css';
+import axios from 'axios';
+import { BASE_URL } from './util/cinfig';
+import { AdCreate } from './pages/ads/Create';
+import { LoginComponent } from './pages/auth/Login';
+import { useEffect } from 'react';
+import {I18n} from "./i18n"
+import { Register } from './pages/auth/Register';
+import { BannerCreate } from './pages/banner/Create';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+import 'swiper/css/autoplay'
+import { ProductDetails } from './pages/ads/Details';
+import City from './pages/City';
+import AdDetails from './pages/banner/Details';
+import Splash from './pages/Splash';
+import Tabs from './pages/Tabs';
 
 setupIonicReact();
+axios.defaults.baseURL=BASE_URL
+const token=localStorage.getItem('token');
 
-const App: React.FC = () => (
+
+axios.defaults.headers.common['Authorization']=token?"Bearer " + token:null
+
+
+const App: React.FC = () => {
+  
+useEffect(()=>{
+  axios.get('/api/user').then(res=>{
+  }).catch(e=>{
+    localStorage.removeItem('token');
+  })
+},[])
+  
+  return (
   <IonApp>
     <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Route exact path="/tab1">
-            <Tab1 />
+      <IonRouterOutlet>
+      <Route exact path="/add"  >
+      {token?<AdCreate /> : <LoginComponent/> }
+        </Route>
+      <Route exact path="/ad/:id" component={ProductDetails} />
+      <Route exact path="/">
+            <Splash/>
           </Route>
-          <Route exact path="/tab2">
-            <Tab2 />
+          <Route path="/tabs" component={Tabs}>
+            
           </Route>
-          <Route path="/tab3">
-            <Tab3 />
-          </Route>
-          <Route exact path="/">
-            <Redirect to="/tab1" />
-          </Route>
-        </IonRouterOutlet>
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="tab1" href="/tab1">
-            <IonIcon aria-hidden="true" icon={triangle} />
-            <IonLabel>Tab 1</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="tab2" href="/tab2">
-            <IonIcon aria-hidden="true" icon={ellipse} />
-            <IonLabel>Tab 2</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="tab3" href="/tab3">
-            <IonIcon aria-hidden="true" icon={square} />
-            <IonLabel>Tab 3</IonLabel>
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
+          <Route exact path="/register">
+    <Register />
+  </Route>
+          <Route exact path="/banner/create">
+    <BannerCreate />
+  </Route>
+      </IonRouterOutlet>
+    
     </IonReactRouter>
   </IonApp>
-);
+);}
 
 export default App;
