@@ -1,5 +1,6 @@
 /* Ionic Variables and Theming. For more info, please see:
 http://ionicframework.com/docs/theming/ */
+
 ion-router-outlet{
   overflow-y: auto;
 }
@@ -34,12 +35,23 @@ ion-button{
 .input-outline-container {
   --border-radius: 14px;
 }
+.MuiInput-root{
+  border-radius: 1rem;
+  --border-radius:.5rem
+}
 .login-input{
   --padding-start: 75px !important;
   --padding-end:75px;
 }
 .button-native{
   --border-radius:14px;
+}
+.tab-selected {
+  svg {
+    stroke: var(--color-selected);
+  };
+  
+  color: var(--color-selected);
 }
 
 /** Ionic CSS Variables **/

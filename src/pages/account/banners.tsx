@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Product } from "../../components/Product"
 import { AdUpdate } from "../ads/Update"
-import { Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 import { BASE_URL } from "../../util/cinfig"
 import { BannerUpdate } from "../banner/Update"
 import { Navigation, Pagination, Scrollbar, A11y,Autoplay } from 'swiper/modules';
@@ -25,6 +25,7 @@ export const MyBanners=()=>{
     const [showModal,setModal]=useState(false)
     const [filters,setFilter]=useState({status_id:1,search:""})
     const {t,i18n}=useTranslation()
+    const history=useHistory()
 
     const updateProduct=(item:any)=>{
         console.log("update")
@@ -69,8 +70,10 @@ useEffect(()=>{
             color={filters.status_id===item.id?"primary":""}
              key={item.id} onClick={()=>setFilter({...filters,status_id:item.id})}>{item['name_'+(i18n.language||'en')]}</IonChip>)}
         </div> */}
-        {products.filter(item=>item.title.indexOf(filters.search)>-1).map((product)=><div  className="ad-container"
-         key={product.id}  onClick={()=>updateProduct(product)}
+        {products.filter(item=>item.title.indexOf(filters.search)>-1).map((product)=><div
+         
+         className="ad-container"
+         key={product.id}  onClick={()=>history.push("/banner/update/"+product.id)}
         ><div 
       
         />

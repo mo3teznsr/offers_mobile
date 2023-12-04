@@ -1,12 +1,14 @@
 import { IonBackButton, IonButton, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar } from "@ionic/react"
-import { Checkbox, IconButton, InputAdornment, TextField } from "@mui/material"
+import { Checkbox, IconButton, InputAdornment, MenuItem, TextField } from "@mui/material"
 import axios from "axios"
 import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { BASE_URL } from "../../util/cinfig"
 import { useHistory } from "react-router"
-import { closeCircleOutline } from "ionicons/icons"
+import { closeCircleOutline, trash, trashOutline } from "ionicons/icons"
 import { Loader } from "@googlemaps/js-api-loader"
+import { DatePicker } from "@mui/x-date-pickers"
+import moment from "moment"
 
 
 
@@ -17,45 +19,16 @@ const [user,setUser]=useState({})
 const [cities, setCities]=useState([])
 const [areas, setAreas]=useState([])
 const [banner,setBanner]=useState({country_id:1,mobile:"", lat: 24.2041721, lng: 55.272619})
-const {t}=useTranslation()
+const {t,i18n}=useTranslation()
 const imgRef=useRef(null)
 const mainRef=useRef(null)
 const history=useHistory()
 const [images,setImages]=useState([])
+const lang=localStorage.getItem('language')||"en"
 var map
 var marker
 useEffect(()=>{
-    const loader = new Loader({
-        apiKey: "AIzaSyBLBPyA77WBsP-cuSSLtr0gEGu_Gc6Piv8",
-        version: "weekly",
-       
-      });
-      //25.2041721,55.272619
-      loader.load().then(async (google) => {
-        const { Map } = await google.maps.importLibrary("maps");
-      
-        map = new Map(document.getElementById("map"), {
-          center: { lat: banner.lat, lng: banner.lng },
-          zoom: 9,
-          mapTypeId:"terrain",
-        });
-        marker=new google.maps.Marker({
-            position: { lat: banner.lat, lng: banner.lng },
-            map,
-            title: "Hello World!",
-          });
-         
-          map.addListener("click", (e) => {
-            const lat=e.latLng.lat()
-            const lng=e.latLng.lng()
-            console.log(banner)
-           setBanner(prev=>({...prev,lat,lng}))
-           map.setCenter(e.latLng)
-           marker.setPosition(e.latLng)
-           
-          });
-        
-      });
+
   
 
      
@@ -69,6 +42,7 @@ useEffect(()=>{
             ...banner,
             country_id:res.data.country_id,
             mobile:res.data.mobile,
+            whatsapp:res.data.mobile
         })
     })
     axios.get("/api/country").then(res=>setCountries(res.data))
@@ -79,12 +53,17 @@ useEffect(()=>{
         <IonHeader>
             <IonToolbar>
                 <IconButton slot="start" onClick={()=>history.goBack()}>
-                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-arrow-left" width="32" height="32" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                {lang=="en"?<svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-arrow-left" width="32" height="32" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
   <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
   <path d="M5 12l14 0" />
   <path d="M5 12l6 6" />
   <path d="M5 12l6 -6" />
-</svg>
+</svg>:<svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-arrow-narrow-right" width="32" height="32" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M5 12l14 0" />
+  <path d="M15 16l4 -4" />
+  <path d="M15 8l4 4" />
+</svg>}
                 </IconButton>
                 <IonTitle>{t("Ad create")}</IonTitle>
             </IonToolbar>
@@ -108,170 +87,257 @@ useEffect(()=>{
                 })
             }} />
 
-<IonLabel>{t("Title")}</IonLabel>
+<IonLabel>{t("Company name")}</IonLabel>
+
         <TextField 
           value={banner.title}
-          
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trademark" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4.5 9h5m-2.5 0v6" />
+  <path d="M13 15v-6l3 4l3 -4v6" />
+</svg>
+              </InputAdornment>
+            )}}
 
           onChange={e=>setBanner({...banner,title:e.target.value})}
-          variant="outlined" fullWidth margin="dense" />
+          variant="outlined" fullWidth margin="dense"
+           />
 
-<IonItem>
-
-                <IonLabel position="floating">{t("Emirate")}</IonLabel>
-                <IonSelect value={banner.city_id} 
-               onIonChange={e=>setBanner({...banner,city_id:e.target.value})}
-                >
-                    {cities.filter(item=>item.country_id===banner.country_id).map(item=><IonSelectOption 
-                    key={item.id} value={item.id}>{item.name_en}</IonSelectOption>)}
-                </IonSelect>
-            </IonItem>
-            <IonItem>
+          
                 <IonLabel position="floating">{t("Category")}</IonLabel>
-                <IonSelect value={banner.category_id} 
-                onIonChange={e=>setBanner({
-                    ...banner,category_id:e.target.value})}>
-                    {categories.map(item=><IonSelectOption 
-                    key={item.id} value={item.id}>{item.name_en}</IonSelectOption>)}
-                </IonSelect>
-            </IonItem>
-            <div style={{display:"flex",gap:10}}>
-            <IonItem style={{minWidth:90}}>
+        
+                <TextField
+          id="outlined-select-currency"
+          select
+          fullWidth
+          variant="outlined"
+          defaultValue={banner.country_id}
+          onChange={e=>setBanner({...banner,category_id:e.target.value})}
+        
+        >
+          {categories.map((option) => (
+            <MenuItem key={option.id} value={option.id}>
+              {option['name_'+lang]}
+            </MenuItem>
+          ))}
+        </TextField>
+
+        <IonLabel>{t("Mobile")}</IonLabel>
+        <TextField 
+          onChange={e=>setBanner({...banner,mobile:e.target.value})} 
+          value={banner.mobile}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
                 <IonSelect value={banner.country_id}>
                     {countries.map(item=><IonSelectOption 
                     key={item.id} value={item.id}>+{item.mobile_code}</IonSelectOption>)}
                 </IonSelect>
-            </IonItem>
-            <IonItem style={{width:"100%"}}>
-                <IonInput placeholder="5xxxxxxxxx" 
-                onIonChange={e=>setBanner({...banner,mobile:e.target.value})} 
-                value={banner.mobile}
-                 />
-            </IonItem>
-            </div>
+              </InputAdornment>
+            )}}
 
+         type="number"
+          variant="outlined" fullWidth margin="dense"
+           />
+
+<IonLabel>{t("Whatsapp")}</IonLabel>
+        <TextField 
+          onChange={e=>setBanner({...banner,whatsapp:e.target.value})} 
+          value={banner.whatsapp}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <IonSelect value={banner.country_id}>
+                    {countries.map(item=><IonSelectOption 
+                    key={item.id} value={item.id}>+{item.mobile_code}</IonSelectOption>)}
+                </IonSelect>
+              </InputAdornment>
+            )}}
+
+         type="number"
+          variant="outlined" fullWidth margin="dense"
+           />
           
-        
 
-        <IonLabel>{t("Start Date")}</IonLabel>
-        <TextField 
-          value={banner.start_at}
-          type="date"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-              <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-calendar" width="32" height="32" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" />
-  <path d="M16 3v4" />
-  <path d="M8 3v4" />
-  <path d="M4 11h16" />
-  <path d="M11 15h1" />
-  <path d="M12 15v3" />
-</svg>
-              </InputAdornment>
-            ),
-          }}
-          onChange={e=>setBanner({...banner,start_at:e.target.value})}
-          variant="outlined" fullWidth />
-          <IonLabel>{t("End Date")}</IonLabel>
-        <TextField 
-          value={banner.end_at}
-          type="date"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-              <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-calendar" width="32" height="32" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" />
-  <path d="M16 3v4" />
-  <path d="M8 3v4" />
-  <path d="M4 11h16" />
-  <path d="M11 15h1" />
-  <path d="M12 15v3" />
-</svg>
-              </InputAdornment>
-            ),
-          }}
-          onChange={e=>setBanner({...banner,end_at:e.target.value})}
-          variant="outlined" fullWidth />
+        <IonLabel>{t("Offer Start Date")}</IonLabel>
+        <DatePicker 
+         onChange={offer_start_at=>setBanner({...banner,offer_start_at})}
+         value={banner.offer_start_at} className="w-100 mb-2" />
+
+          <IonLabel>{t("Offer End Date")}</IonLabel>
+          <DatePicker 
+         onChange={offer_end_at=>setBanner({...banner,offer_end_at})}
+         value={banner.offer_end_at} className="w-100 mb-2" />
+      
+
+<IonLabel>{t("Adz publish date starts one")}</IonLabel>
+<DatePicker 
+         onChange={ad_start_at=>setBanner({...banner,ad_start_at})}
+         value={banner.ad_start_at} className="w-100 mb-2" />
+       
+          <IonLabel>{t("Adz publish date ends on")}</IonLabel>
+          <DatePicker 
+         onChange={ad_end_at=>setBanner({...banner,ad_end_at})}
+         value={banner.ad_end_at} className="w-100 mb-2" />
+
           <h3>{t("Socail media links")}</h3>
 
-        <IonLabel>{t("facebook")}</IonLabel>
+  
           <TextField 
           value={banner.facebook}
+          margin="dense"
           onChange={e=>setBanner({...banner,facebook:e.target.value})}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+            <svg xmlns="http://www.w3.org/2000/svg"  width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3" />
+</svg>
+              </InputAdornment>
+            ),
+          }}
           variant="outlined" fullWidth />
 
-<IonLabel>{t("Snapchat")}</IonLabel>
+
           <TextField 
           value={banner.snapchat}
           onChange={e=>setBanner({...banner,snapchat:e.target.value})}
-          variant="outlined" fullWidth />
+          variant="outlined" fullWidth
+          margin="dense"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+          <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-brand-snapchat" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M16.882 7.842a4.882 4.882 0 0 0 -9.764 0c0 4.273 -.213 6.409 -4.118 8.118c2 .882 2 .882 3 3c3 0 4 2 6 2s3 -2 6 -2c1 -2.118 1 -2.118 3 -3c-3.906 -1.709 -4.118 -3.845 -4.118 -8.118zm-13.882 8.119c4 -2.118 4 -4.118 1 -7.118m17 7.118c-4 -2.118 -4 -4.118 -1 -7.118" />
+</svg>
+              </InputAdornment>
+            ),
+          }}
+          
+          />
 
-<IonLabel>{t("Instagram")}</IonLabel>
+
           <TextField 
           value={banner.instagram}
           onChange={e=>setBanner({...banner,instagram:e.target.value})}
-          variant="outlined" fullWidth />
+          variant="outlined" fullWidth
+          margin="dense"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-brand-instagram" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 4m0 4a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z" />
+  <path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+  <path d="M16.5 7.5l0 .01" />
+</svg>
+              </InputAdornment>
+            ),
+          }}
+          />
 
-<IonLabel>{t("Tiktok")}</IonLabel>
+
           <TextField 
+          margin="dense"
+           InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+           <svg xmlns="http://www.w3.org/2000/svg"  width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M21 7.917v4.034a9.948 9.948 0 0 1 -5 -1.951v4.5a6.5 6.5 0 1 1 -8 -6.326v4.326a2.5 2.5 0 1 0 4 2v-11.5h4.083a6.005 6.005 0 0 0 4.917 4.917z" />
+</svg>
+              </InputAdornment>
+            ),
+          }}
           value={banner.tiktok}
           onChange={e=>setBanner({...banner,tiktok:e.target.value})}
           variant="outlined" fullWidth />
+ <h3>{t("Location")} </h3>
+<IonLabel position="floating">{t("Emirate")}</IonLabel>
+        
+        <TextField
+  id="outlined-select-currency"
+  select
+  fullWidth
+  variant="outlined"
+  defaultValue={banner.city_id}
+  onChange={e=>setBanner({...banner,city_id:e.target.value})}
+
+>
+  {cities.map((option) => (
+    <MenuItem key={option.id} value={option.id}>
+      {option['name_'+lang]}
+    </MenuItem>
+  ))}
+</TextField>
+
+<IonLabel>{t("Location")}</IonLabel>
+          <TextField 
+          value={banner.location}
+          className="mb-2"
+          onChange={e=>setBanner({...banner,location:e.target.value})}
+          variant="outlined" fullWidth />
           
-<div style={{display:"flex",justifyContent:"space-between",padding:"0 10",alignItems:"center"}}>
+<div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
 <h3>{t("Images")}</h3>
-<span>{images.length}/10</span>
+{images.length<=10&& <button 
+onClick={()=>imgRef.current?.click()}
+className="btn btn-outline-danger " style={{borderRadius:15}}>{t("Add Image")} </button>}
 </div>
-           
-            <div className="img-upload" onClick={()=>imgRef.current?.click()} >
-                <span>{t('Image upload')}</span>
+  <strong className="text-danger my-1 text-bold">{t("You can add up to 10 images")}</strong>      
+          
+         
 
-                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-photo-plus" width="32" height="32" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+             <div className="row" >
+                        {images.map((img,index)=><div key={img} className="col-4 mb-2" style={{position:"relative",}}>
+                        <svg xmlns="http://www.w3.org/2000/svg" 
+                         onClick={()=>{
+                          const list=images
+                          list.splice(index,1)
+                          setImages([...list])
+                      }}
+                         style={{position:"absolute",top:5,right:15}}
+
+                         width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
   <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M15 8h.01" />
-  <path d="M12.5 21h-6.5a3 3 0 0 1 -3 -3v-12a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v6.5" />
-  <path d="M3 16l5 -5c.928 -.893 2.072 -.893 3 0l4 4" />
-  <path d="M14 14l1 -1c.67 -.644 1.45 -.824 2.182 -.54" />
-  <path d="M16 19h6" />
-  <path d="M19 16v6" />
+  <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
+  <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
+  <path d="M16 5l3 3" />
 </svg>
-
-            </div>
-           {images.length==0&& <img 
-            
-            src={"assets/images/404.jpg"} 
-            style={{width:"100%",height:"220px",borderRadius:10,marginBottom:".5rem"}}
-            />}
-
-             <div style={{display:"grid",gridTemplateColumns:"auto auto",gap:10}} >
-                        {images.map((img,index)=><div key={img} style={{position:"relative"}}>
-                            
-                                <IonIcon icon={closeCircleOutline} size="large" color="primary"  style={{position:"absolute",top:5,left:5}} onClick={()=>{
+                                {/* <IonIcon icon={trashOutline} size="large" color="primary"  onClick={()=>{
                                 const list=images
                                 list.splice(index,1)
                                 setImages([...list])
-                            }} />
+                            }} /> */}
                           
-                            <img src={BASE_URL+'/images/'+img} style={{width:"100%",height:250,objectFit:"cover",borderRadius:10}} />
+                            <img src={BASE_URL+'/images/'+img}
+                             style={{width:"100%",height:100,objectFit:"cover",borderRadius:10,border:"1px #999 solid"}} />
                            
                         </div>)}
                        
                         </div>
-                        <IonLabel className="mt-2">{t('Location')}</IonLabel>
-                        <div id="map" style={{width:"100%",height:220,borderRadius:10,marginBottom:10}}></div>
+                     
+                      
 
 
 <IonButton style={{width:"100%"}}
-onClick={()=>axios.post("/api/ads",{...banner,images}).then(res=>{
-    window.location.replace('/tab2')
+onClick={()=>axios.post("/api/ads",{...banner
+  ,offer_start_at:moment(banner.offer_start_at).format("YYYY-MM-DD")
+  ,offer_end_at:moment(banner.offer_end_at).format("YYYY-MM-DD")
+  ,ad_start_at:moment(banner.ad_start_at).format("YYYY-MM-DD")
+  ,ad_end_at:moment(banner.ad_end_at).format("YYYY-MM-DD")
+  ,images}).then(res=>{
+    window.location.replace('/tabs/tab2')
    // history.push('/tab2');
 }).catch(e=>{
 
 })}
-disabled={!(banner.city_id&&banner.category_id&&banner.mobile&&banner.start_at&&banner.end_at)}
+disabled={!(banner.city_id&&banner.category_id&&banner.mobile&&banner.offer_end_at&&banner.offer_start_at&&images.length>0)}
 >{t("Save")} </IonButton>
 
         </IonContent>

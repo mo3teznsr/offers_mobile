@@ -6,7 +6,7 @@ import { useEffect } from "react";
 const Splash=()=>{
 useEffect(()=>{
     setTimeout(()=>{
-        window.location.replace('/tabs/tab1')
+        window.location.replace('/tabs/home')
     },5000)
 })
 return <IonPage>

@@ -1,7 +1,10 @@
-import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonPage, IonSelect, IonSelectOption } from "@ionic/react"
+import { IonButton, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonNote, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar } from "@ionic/react"
+import { IconButton, InputAdornment, TextField } from "@mui/material"
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { BASE_URL } from "../../util/cinfig"
+import { useHistory } from "react-router"
 
 
 
@@ -24,8 +27,8 @@ const Login=()=>{
 }
 
 const { t, i18n } = useTranslation();
-
-
+const [showPassword,setShowPassword] = useState(false);
+const imgRef=useRef(null)
 useEffect(()=>{
     axios.get('/api/country').then(res=>{
         
@@ -38,91 +41,225 @@ useEffect(()=>{
         console.log('Error countries',e.response)
     })
 },[])
-
-    return <IonPage><IonContent> <div className="ion-padding" style={{marginTop:"15px"}}>
+const lang=localStorage.getItem('language')||"en"
+const history=useHistory()
+    return <IonPage>
+        <IonHeader>
+            <IonToolbar>
+                <IconButton onClick={()=>history.goBack()} slot="start">
+                {lang=="en"?<svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-arrow-left" width="32" height="32" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M5 12l14 0" />
+  <path d="M5 12l6 6" />
+  <path d="M5 12l6 -6" />
+</svg>:<svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-arrow-narrow-right" width="32" height="32" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M5 12l14 0" />
+  <path d="M15 16l4 -4" />
+  <path d="M15 8l4 4" />
+</svg>}
+                </IconButton>
+                <IonTitle>{t("SignUp")} </IonTitle>
+            </IonToolbar>
+        </IonHeader>
+        <IonContent> <div className="ion-padding" style={{marginTop:"15px"}}>
       
-        <img src="assets/images/logo.png" style={{marginTop:25}}  />
-        
+        <img src={user.image?BASE_URL+'/images/'+user.image:"assets/images/404.jpg"}
+        onClick={()=>{
+            imgRef.current?.click()
+        }}
+         style={{marginTop:25,width:75,height:75,borderRadius:75,display:"block",margin:"10px auto"}}  />
+        <input type="file" accept="image/*" style={{display:"none"}} ref={imgRef} onChange={(e)=>{
+ 
+ const file=e.target.files[0]
+ if(file)
+ {
+   const data=new FormData()
+   data.append('image', file)
+   
+     axios.post('/api/upload',data).then(res=>{
+        setUser({...user,image:res.data})
+     })
+   //  setAd(oldAd=>({...oldAd,Images:[...images,...imgs]}))
+     
+ }
 
+}}  />
         <div>
-        <IonLabel position="stacked">{"name"} </IonLabel>
-       
+        <IonLabel position="stacked">{t("name")} </IonLabel>
+        <TextField
+        id="input-with-icon-textfield"
+        placeholder={t("name")}
+        onChange={e=>setRegister({...register,name:e.target.value})}
+        value={register.name}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+            </InputAdornment>
+          ),
+        }}
+        variant="outlined" fullWidth margin="dense"
+      />
                 
-                <IonInput  fill="outline"
-                className={errors.name?"ion-invalid":""} value={register.name} 
-               
-                onIonChange={e=>setRegister({...register,name:e.target.value})}
-                  />
+              
                  
             
-            {errors.name&& <IonNote color="danger">{errors.name[0]}</IonNote>}
+            {errors.name&& <IonNote color="danger">{errors.name[0]} <br/></IonNote>}
 
            
-                <IonLabel position="stacked">{"email"} </IonLabel>
-                <IonInput fill="outline" className={errors.email?"ion-invalid":""} value={register.email} 
-                
-                onIonChange={e=>setRegister({...register,email:e.target.value})}
-                  />
-                   
+                <IonLabel position="stacked">{t("email")} </IonLabel>
+                <TextField
+        id="input-with-icon-textfield"
+        placeholder={t("email")}
+        onChange={e=>setRegister({...register,email:e.target.value})}
+        value={register.email}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+             <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-mail" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" />
+  <path d="M3 7l9 6l9 -6" />
+</svg>
+            </InputAdornment>
+          ),
+        }}
+        variant="outlined" fullWidth margin="dense"
+      />
+               
            
-            {errors.email&& <IonNote color="danger">{errors.email[0]}</IonNote>}
-        <div style={{display:"flex"}}>
-            
-            
-            <IonItem>
+            {errors.email&& <IonNote color="danger">{errors.email[0]}<br/></IonNote>}
+            <IonLabel >{t("Mobile")} </IonLabel>
+            <TextField
+        id="input-with-icon-textfield"
+        placeholder={t("Mobile")}
+        onChange={e=>setRegister({...register,mobile:e.target.value})}
+        value={register.mobile}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+         
             <IonSelect interface="action-sheet" value={register.country_id}  onIonChange={(e)=>setRegister({...register,country_id:e.target.value})} >
                 {countries.map((item:any)=><IonSelectOption key={item.id} value={item.id}>+{item.mobile_code}</IonSelectOption>)}
 
             </IonSelect>
-            </IonItem>
-           
-            <IonItem style={{flex:1}} >
-                <IonInput value={register.mobile} className={errors.mobile?"ion-invalid":""}
-               
-                 onIonChange={(e)=>setRegister({...register,mobile:e.target.value})}></IonInput>
-                  
-            </IonItem>
             
-        </div>
-        {errors.mobile&& <IonNote color="danger">{errors.mobile[0]}</IonNote>}
-        <IonItem>
+            </InputAdornment>
+          ),
+        }}
+        variant="outlined" fullWidth margin="dense"
+      />
+ 
+        {errors.mobile&& <IonNote color="danger">{errors.mobile[0]}<br/></IonNote>}
+        
             <IonLabel position="floating">{t("Password")}</IonLabel>
-            <IonInput value={register.password}  className={errors.password?"ion-invalid":""}
+            
+            <TextField
+        id="input-with-icon-textfield"
+        placeholder={t("Password")}
+        type={showPassword?"text":"password"}
+        onChange={e=>setRegister({...register,password:e.target.value})}
+        value={register.password}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-lock" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z" />
+  <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" />
+  <path d="M8 11v-4a4 4 0 1 1 8 0v4" />
+</svg>
+            </InputAdornment>
+          ),
+          endAdornment:<InputAdornment position="end">
+            <IconButton onClick={()=>setShowPassword(!showPassword)}>
+                {!showPassword?<svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-eye-closed" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M21 9c-2.4 2.667 -5.4 4 -9 4c-3.6 0 -6.6 -1.333 -9 -4" />
+  <path d="M3 15l2.5 -3.8" />
+  <path d="M21 14.976l-2.492 -3.776" />
+  <path d="M9 17l.5 -4" />
+  <path d="M15 17l-.5 -4" />
+</svg>:<svg xmlns="http://www.w3.org/2000/svg"  width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+  <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+</svg>}
+            </IconButton>
+          </InputAdornment>
+        }}
+        variant="outlined" fullWidth margin="dense"
+      />
+            
            
-            onIonChange={(e)=>setRegister({...register,password:e.target.value})} type="password"></IonInput>
-             
-        </IonItem>
-        {errors.password&& <IonNote color="danger">{errors.password[0]}</IonNote>}
+   
+        {errors.password&& <IonNote color="danger">{errors.password[0]}<br/></IonNote>}
+        <IonLabel position="floating">{t("Password Confirmation")}</IonLabel>
+            
+            <TextField
+        id="input-with-icon-textfield"
+        placeholder={t("Password Confirmation")}
+        type={showPassword?"text":"password"}
+        onChange={e=>setRegister({...register,cpassword:e.target.value})}
+        value={register.cpassword}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+             <svg xmlns="http://www.w3.org/2000/svg"  width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z" />
+  <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" />
+  <path d="M8 11v-4a4 4 0 1 1 8 0v4" />
+</svg>
+            </InputAdornment>
+          ),
+          endAdornment:<InputAdornment position="end">
+            <IconButton onClick={()=>setShowPassword(!showPassword)}>
+                {!showPassword?<svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-eye-closed" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M21 9c-2.4 2.667 -5.4 4 -9 4c-3.6 0 -6.6 -1.333 -9 -4" />
+  <path d="M3 15l2.5 -3.8" />
+  <path d="M21 14.976l-2.492 -3.776" />
+  <path d="M9 17l.5 -4" />
+  <path d="M15 17l-.5 -4" />
+</svg>:<svg xmlns="http://www.w3.org/2000/svg"  width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+  <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+</svg>}
+            </IconButton>
+          </InputAdornment>
+        }}
+        variant="outlined" fullWidth margin="dense"
+      />
+          
+     <button className="btn btn-danger w-100"
+     onClick={()=>{
+        setErrors({})
+          axios.post('/api/register',register).then(res=>{
+            localStorage.setItem('token',res.data);
+            window.location.replace('/tabs/home')
+          }).catch(e=>{
+            console.log(e.response?.data)
+           if(e.response?.data)
+            setErrors(e.response?.data.errors)
+          })
+    }} 
+     >{t("Register")}</button>
 
-     
-
-        <IonButton color="danger"  onClick={()=>{
-            setErrors({})
-              axios.post('/api/register',register).then(res=>{
-                localStorage.setItem('token',res.data);
-                window.location.reload()
-              }).catch(e=>{
-                console.log(e.response?.data)
-               if(e.response?.data)
-                setErrors(e.response?.data.errors)
-              })
-        }} style={{width:"100%"}}>{t("Register")}</IonButton>
+       
             </div>
 
        {error&& <IonItem color="danger" style={{marginTop:15}} lines="none">
             <IonLabel>Wrong credentials</IonLabel>
         </IonItem>}
 
-        <IonButton color="danger"  onClick={()=>{
-            setError(false)
-              axios.post('/api/users/register',user).then(res=>{
-                localStorage.setItem('token',res.data.token);
-                window.location.reload()
-              }).catch(e=>{
-                console.log(e)
-                setError(true)
-              })
-        }} style={{width:"100%"}}>{t("login")}</IonButton>
+    
 
     </div></IonContent></IonPage>
 }

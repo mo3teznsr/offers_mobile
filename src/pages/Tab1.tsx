@@ -1,4 +1,4 @@
-import { IonButtons, IonChip, IonContent, IonHeader, IonIcon, IonLabel, IonModal, IonPage, IonSegment, IonSegmentButton, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButtons, IonChip, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonModal, IonPage, IonSegment, IonSegmentButton, IonSpinner, IonThumbnail, IonTitle, IonToolbar } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import './Tab1.css';
 import { useEffect, useState } from 'react';
@@ -45,12 +45,14 @@ useEffect(()=>{
 setBanners(res.data.banners)
 //setAds(res.data.products)
   })
-  axios.get("/api/category").then(res=>{
+  axios.get("/api/ads-group").then(res=>{
     setCategories(res.data)
 }).catch(err=>{
 
 })
 },[])
+const consent=localStorage.getItem("consent")
+const [showConsent,setShowConsent]=useState(consent?false:true)
 const [ad,setAd]=useState({})
 const slideOpts = {
   initialSlide: 1,
@@ -62,9 +64,18 @@ const productDetails=(item)=>{
   setProduct(item)
   setShowProduct(true)
 }
+
+const lang=localStorage.getItem('language')||"en"
+if(cities.length==0)
+{
+  return <div style={{width:"100%",
+  height:"100vh",display:"flex",justifyContent:"center",alignItems:"center"}}>
+    <IonSpinner color="primary" />
+  </div>
+}
   return (
     <IonPage>
-      <IonHeader>
+      {/* <IonHeader>
         <IonToolbar>
           <img src="assets/images/logo.png" style={{height:40}} />
           <IonButtons slot='end'>
@@ -73,12 +84,12 @@ const productDetails=(item)=>{
               <IonIcon icon={notifications}  style={{fontSize:24}}  />
             </IonButtons>
         </IonToolbar>
-      </IonHeader>
+      </IonHeader> */}
       <IonContent  className='ion-padding'>
 
 
-<h3>{t("Emirates")} </h3>
-        <div style={{overflowX:"auto",whiteSpace:"nowrap",height:"160px"}}
+
+        {/* <div style={{overflowX:"auto",whiteSpace:"nowrap"}}
         >
           {cities.map(item=><div 
           onClick={()=>{
@@ -86,58 +97,160 @@ const productDetails=(item)=>{
             setShowCity(true)
           }}
           style={{display:"inline-block",marginInlineEnd:"10px",borderRadius:"10px"}}
-          className='shadow' 
+          
            key={item.id}>
             <img src={BASE_URL+"/images/"+item.image} 
-            style={{width:"100%",height:"120px",borderRadius:"10px"}}
+            style={{width:"70px",height:"70px",borderRadius:"70px",display:"block",
+            margin:"0 auto"
+          }}
              />
              <div style={{width:"100%",textAlign:"center",paddingBottom:"5px"}}>
               <span style={{textAlign:"center",marginBottom:"5px"}}>{i18n.language=='ar'?item.name_ar:item.name_en}</span>
              </div>
           </div>)}
+        </div> */}
+        <span>{t("We require your emirates to find the best nearby deals")} </span>
+        {cities.map(item=><IonItem onClick={()=>{
+           history.push("/city/"+item.id)
+        }}>
+          <IonThumbnail slot='start'>
+            <img src={BASE_URL+"/images/"+item.image}  />
+          </IonThumbnail>
+          <IonLabel>
+          {i18n.language=='ar'?item.name_ar:item.name_en}
+          </IonLabel>
+        </IonItem>)}
+
+        {/* {cities.map(item=><div 
+        key={item.id}
+          onClick={()=>{
+           // setCity(item)
+            //setShowCity(true)
+            history.push("/city/"+item.id)
+          }}
+          style={{display:"block",borderRadius:"10px",position:"relative",marginBottom:"10px"}}
+          
+           key={item.id}>
+            <img src={BASE_URL+"/images/"+item.image} 
+            style={{width:"100%",height:"270px",borderRadius:"15px",display:"block",
+            margin:"0 auto"
+          }}
+             />
+             <div style={{width:"100%",height:"270px",position:"absolute",
+             borderRadius:"15px",
+             background:"#0002",zIndex:2,top:0
+             ,textAlign:"center",paddingBottom:"5px"}}>
+              <div style={{height:"200px"}}></div>
+              <span style={{textAlign:"center",marginBottom:"5px",color:"#fff",
+            fontSize:"35px",fontWeight:"600"
+            }}>{i18n.language=='ar'?item.name_ar:item.name_en}</span>
+             </div>
+          </div>)} */}
+{/* {   categories.map(category=> category.products.length>0&& <>
+        <div className='d-flex' style={{justifyContent:"space-between",alignItems:"center"}}>
+        <strong>{category['name_'+lang]}</strong>
+        <a className='text-danger'
+        href={"/list?category_id="+category.id}
+         style={{textDecoration:"none"}}>{t("See more")}</a>
         </div>
-        <h3>{t("Ads")}</h3>
+       
         <div style={{overflowX:"auto",whiteSpace:"nowrap",height:"360px"}}
         >
-        {ads.map(item=> <div className='shadow'
+        {category.products.map(item=> <div 
+         className='shadow'
         onClick={()=>{
           setAd(item)
           setShowProduct(true)
         }}
         style={{display:"inline-block",
-        width:"300px",marginInlineEnd:"10px",position:"relative"}}
+        marginInlineEnd:"10px",position:"relative",borderRadius:"10px"}}
         key={item.id}>
-          <div style={{display:"block"}}>
+          <div style={{display:"block",borderRadius:"5px",}}>
          
       <img src={BASE_URL+"/images/"+item.images[0].image}
-     style={{width:"300px",height:"330px",borderRadius:"10px"}}
+     style={{width:"115px",height:"150px",borderRadius:"10px"}}
        />
- <div style={{background:"#4442",position:"absolute",top:0,left:0,height:"330px",zIndex:2,width:"100%",borderRadius:"15px"}}>
 
-
-<div style={{position:"relative",height:"330px"}}>
-
-  <div style={{position:"absolute",bottom:"15px",color:"#fff",left:"10px",zIndex:4}}>
-<h2 style={{fontWeight:"bold"}}>{item.title} </h2>
-    </div>
-
-  </div>
-  </div>
      
    
 </div>
-
+<span className='p-1' style={{overflow:"clip"}}>{item.title} </span>
          </div>)}
 
           </div>
+          </>)} */}
+          <IonModal isOpen={showConsent}>
+            <IonPage>
+              <IonContent className='ion-padding'>
+                <strong   className='text-center d-block w-100'>أهلا بكم</strong>
+                <p style={{textAlign:"right"}} className='my-1'>
+                أول تطبيق يضم الخصومات و العروض المميزة في منصة واحدة بأقسام مختلفة ومن مختلف الإمارات. حاليا التطبيق متاح مجانا للشركات و المحلات المعلنة. 
+                </p>
+                <strong className='text-center d-block'>
+                WELCOME
+                </strong>
+                <p className='my-1 text-right'>
+                The first mobile APP that contains only offers and discounts , from different categories around the UAE. It is free APP at the present for all companies and shops.
+                </p>
 
-          <IonModal isOpen={showProduct}>
-            <AdDetails product={ad} close={()=>setShowProduct(false)} />
+                <hr/>
+                <div className='text-right' dir="rtl">
+                  <strong >
+                  قبل إدخال الإعلان على المعلن قراءة هذه التعليمات 
+
+                  </strong>
+                  <ul>
+                    <li>
+                    عدم نشر صور غير لائقة أو كلمات خادشة للحياء.
+                    </li>
+                    <li>
+                    عدم نشر معلومات غير صحيحة للأسعار و المنتجات مما يعرضه للمساءلة و إلغاء الإعلان دون سابق إنذار.
+                    </li>
+                    <li>
+                    يجب إدراج خصومات او تنزيلات لخمسة منتجات أو خدمات أو مواد على الأقل خلال فترة العرض.
+                    </li>
+                    <li>
+                    فترة العرص من سبعة أيام إلى ثلاثين يوما.
+                    </li>
+                    <li>
+                    يجب التأكد من كتابة أرقام التواصل و روابط السوشل ميديا وإحداثيات الموقع.
+                    </li>
+                    <li>
+                    يجب اختيار فترة نشر الإعلان في التطبيق بشكل صحيح و فترة الخصومات.
+                    </li>
+                    <li>
+                    ليس بالضرورة أن تكون فترة الخصومات هي نفسها فترة نشر الإعلان.
+                    </li>
+                    <li>
+                    اختيار الصور الواضحة و الخط الواضح و القسم المناسب في الإعلان سيزيد من تواصل المتابعين.
+                    </li>
+                  </ul>
+                </div>
+               <div dir='ltr'>
+              <strong> Before uploading your offer, please read these instructions carefully:</strong>
+              <ul>
+<li>Do not post inappropriate pictures or indecent words.</li>
+<li>Do not publish incorrect information about prices and products, which exposes you to accountability and cancellation of the advertisement without further notice.</li>
+<li>Discounts or promotions must be for at least 5 products, services or items during the offer period.</li>
+<li>The period of offers ranges from 7 to 30 days.</li>
+<li>You must make sure to write down contact numbers, social media links, and location coordinates.</li>
+<li>The period for publishing the advertisement in the APP must be chosen correctly and it differs from the period for discounts.</li>
+<li>The discount period does not have to be the same as the period of publication of the advertisement.</li>
+<li>Choosing clear images, clear font, and the appropriate section in the APP will increase followers’ communication.</li>
+</ul>
+<button className='btn btn-danger w-100' onClick={()=>{
+  localStorage.setItem("consent",true)
+  setShowConsent(false)
+}}>
+  Agree / موافق
+</button>
+               </div>
+              </IonContent>
+            </IonPage>
+
           </IonModal>
 
-          <IonModal isOpen={showCity}>
-            <City city={city} close={()=>setShowCity(false)} />
-          </IonModal>
+        
 
           {/* <IonModal isOpen={showProduct}>
           <IonPage>
@@ -169,13 +282,13 @@ const productDetails=(item)=>{
         />
         <div style={{display:"flex",justifyContent:"center"}}>
                <IconButton href={`tel:0${banner.mobile}`}>
-               <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-phone" width="32" height="32" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+               <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-phone" width="32" height="32" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
  <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
 </svg>
                </IconButton>
                <IconButton href={`https://wa.me/971${banner.mobile}`}>
-               <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-brand-whatsapp" width="32" height="32" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+               <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-brand-whatsapp" width="32" height="32" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
  <path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9" />
  <path d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1" />
