@@ -16,6 +16,7 @@ const Tab3: React.FC = () => {
     window.location.reload()
   }
   const {t}=useTranslation()
+  const lang=localStorage.getItem('language')||"en"
   return (
     <IonPage>
       <IonContent className='ion-padding'>
@@ -59,12 +60,16 @@ const Tab3: React.FC = () => {
         </div>
 
         <Drawer
+       dir={lang=="ar"?"rtl":"ltr"}
+       style={{direction:lang=="ar"?"rtl":"ltr"}}
       anchor="bottom"
       open={showLanguage}
       onClose={()=>setShowLanguage( false)}
     >
     
-     <div className='p-2'>
+     <div className='p-2'
+      style={{direction:lang=="ar"?"rtl":"ltr"}}
+      dir={lang=="ar"?"rtl":"ltr"} >
      <strong className='text-center'>{t("Language")} </strong>
      <Divider className='my-1' />
     
