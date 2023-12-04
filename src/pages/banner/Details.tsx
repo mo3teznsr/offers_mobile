@@ -73,7 +73,7 @@ if(!product?.id)
                   <IonIcon icon={heart} color={isLiked?"primary":"dark"} />
                 </IconButton>
             <Swiper
-     
+     style={{direction:"ltr"}}
      modules={[ Pagination, Scrollbar, A11y,Autoplay,Zoom]}
      loop
      slidesPerView={1}
