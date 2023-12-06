@@ -40,7 +40,9 @@ export const ar={
     SignUp:"انشاء حساب",
     name:"الاسم",
     email:"البريد الالكتروني",
-    "Password Confirmation":"تأكيد كلمة المرور"
+    "Password Confirmation":"تأكيد كلمة المرور",
+    "Thank you for adding offer, Good luck":"نشكرك على الإعلان معنا. نرجو لك الرزق و التوفيق",
+    "Go to Home":"الذهاب للرئيسية",
 
 
 }

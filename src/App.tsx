@@ -60,6 +60,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { I18nextProvider } from 'react-i18next';
 import { BannerUpdate } from './pages/banner/Update';
+import Success from './pages/Success';
 setupIonicReact();
 axios.defaults.baseURL=BASE_URL
 const token=localStorage.getItem('token');
@@ -103,6 +104,7 @@ useEffect(()=>{
     <IonReactRouter>
       <IonRouterOutlet>
         <Route exact path="/banner/update/:id" component={BannerUpdate} ></Route>
+        <Route exact path="/success" component={Success} />
       <Route exact path="/add"  >
       {token?<AdCreate /> : <LoginComponent/> }
         </Route>

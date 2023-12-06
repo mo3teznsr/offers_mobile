@@ -341,7 +341,7 @@ onClick={()=>axios.post("/api/ads",{...banner
   ,ad_start_at:moment(banner.ad_start_at).format("YYYY-MM-DD")
   ,ad_end_at:moment(banner.ad_end_at).format("YYYY-MM-DD")
   ,images}).then(res=>{
-    window.location.replace('/tabs/tab2')
+    window.location.replace('/success')
    // history.push('/tab2');
 }).catch(e=>{
 
