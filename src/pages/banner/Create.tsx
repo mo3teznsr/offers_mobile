@@ -9,6 +9,7 @@ import { closeCircleOutline, trash, trashOutline } from "ionicons/icons"
 import { Loader } from "@googlemaps/js-api-loader"
 import { DatePicker } from "@mui/x-date-pickers"
 import moment from "moment"
+import dayjs from "dayjs"
 
 
 
@@ -69,13 +70,20 @@ useEffect(()=>{
             </IonToolbar>
         </IonHeader>
         <IonContent className="ion-padding">
-            <input type="file" style={{display:"none"}} accept="image/*" ref={imgRef} onChange={e=>{
-                const file = e.target.files[0]
-                const data=new FormData()
-                data.append('image',file)
-                axios.post('/api/upload',data).then(res=>{
-                   setImages([...images,res.data])
+            <input type="file" multiple style={{display:"none"}} accept="image/*" ref={imgRef} onChange={e=>{
+                const file = e.target.files
+                if(file?.length>0)
+                { 
+                  const data=new FormData()
+                 for (const key of Object.keys(file)) {
+                   data.append('images[]', file[key]);
+               }
+               
+               
+                axios.post('/api/uploads',data).then(res=>{
+                   setImages([...images,...res.data])
                 })
+              }
             }} />
 
 <input type="file" style={{display:"none"}} ref={mainRef} onChange={e=>{
@@ -87,6 +95,24 @@ useEffect(()=>{
                 })
             }} />
 
+<IonLabel position="floating">{t("Emirate")}</IonLabel>
+        
+        <TextField
+  id="outlined-select-currency"
+  select
+  fullWidth
+  variant="outlined"
+  defaultValue={banner.city_id}
+  onChange={e=>setBanner({...banner,city_id:e.target.value})}
+
+>
+  {cities.map((option) => (
+    <MenuItem key={option.id} value={option.id}>
+      {option['name_'+lang]}
+    </MenuItem>
+  ))}
+</TextField>
+
 <IonLabel>{t("Company name")}</IonLabel>
 
         <TextField 
@@ -94,7 +120,7 @@ useEffect(()=>{
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trademark" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-trademark" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
   <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
   <path d="M4.5 9h5m-2.5 0v6" />
   <path d="M13 15v-6l3 4l3 -4v6" />
@@ -164,24 +190,24 @@ useEffect(()=>{
 
         <IonLabel>{t("Offer Start Date")}</IonLabel>
         <DatePicker 
-         onChange={offer_start_at=>setBanner({...banner,offer_start_at})}
-         value={banner.offer_start_at} className="w-100 mb-2" />
+         onChange={offer_start_at=>setBanner({...banner,offer_start_at:offer_start_at.$d})}
+         value={dayjs(banner.offer_start_at)} className="w-100 mb-2" />
 
           <IonLabel>{t("Offer End Date")}</IonLabel>
           <DatePicker 
-         onChange={offer_end_at=>setBanner({...banner,offer_end_at})}
-         value={banner.offer_end_at} className="w-100 mb-2" />
+         onChange={offer_end_at=>setBanner({...banner,offer_end_at:offer_end_at.$d})}
+         value={dayjs(banner.offer_end_at)} className="w-100 mb-2" />
       
 
 <IonLabel>{t("Adz publish date starts one")}</IonLabel>
 <DatePicker 
-         onChange={ad_start_at=>setBanner({...banner,ad_start_at})}
-         value={banner.ad_start_at} className="w-100 mb-2" />
+         onChange={ad_start_at=>setBanner({...banner,ad_start_at:ad_start_at.$d})}
+         value={dayjs(banner.ad_start_at)} className="w-100 mb-2" />
        
           <IonLabel>{t("Adz publish date ends on")}</IonLabel>
           <DatePicker 
-         onChange={ad_end_at=>setBanner({...banner,ad_end_at})}
-         value={banner.ad_end_at} className="w-100 mb-2" />
+         onChange={ad_end_at=>setBanner({...banner,ad_end_at:ad_end_at.$d})}
+         value={dayjs(banner.ad_end_at)} className="w-100 mb-2" />
 
           <h3>{t("Socail media links")}</h3>
 
@@ -257,24 +283,7 @@ useEffect(()=>{
           value={banner.tiktok}
           onChange={e=>setBanner({...banner,tiktok:e.target.value})}
           variant="outlined" fullWidth />
- <h3>{t("Location")} </h3>
-<IonLabel position="floating">{t("Emirate")}</IonLabel>
-        
-        <TextField
-  id="outlined-select-currency"
-  select
-  fullWidth
-  variant="outlined"
-  defaultValue={banner.city_id}
-  onChange={e=>setBanner({...banner,city_id:e.target.value})}
 
->
-  {cities.map((option) => (
-    <MenuItem key={option.id} value={option.id}>
-      {option['name_'+lang]}
-    </MenuItem>
-  ))}
-</TextField>
 
 <IonLabel>{t("Location")}</IonLabel>
           <TextField 

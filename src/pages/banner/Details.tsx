@@ -54,7 +54,7 @@ if(!product?.id)
 }
     return <IonPage>
         <IonContent>
-            <div style={{position:"relative"}}>
+            <div style={{position:"relative",padding:".5rem",}}>
                 <IconButton
                 onClick={()=>history.goBack()}
                  style={{position:"absolute",left:"10px",top:"10px",zIndex:3}}>
@@ -193,14 +193,14 @@ if(!product?.id)
                 
             </div>
             <div slot="end">
-              <IconButton target="_blank" href={product.location}>
+             {product.location&& <IconButton target="_blank" href={product.location}>
               <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-map-pin" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
   <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
   <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
   <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" />
 </svg>
-              </IconButton>
-                        <IconButton target="_blank" href={"https://wa.me/971"+product.mobile}>
+              </IconButton>}
+                        <IconButton target="_blank" href={"https://wa.me/971"+product.whatsapp}>
                         <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-brand-whatsapp" width="25" height="25" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
   <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
   <path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9" />

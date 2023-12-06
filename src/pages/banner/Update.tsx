@@ -63,28 +63,49 @@ if(!banner?.id)
             </IonToolbar>
         </IonHeader>
         <IonContent className="ion-padding">
-            <input type="file" style={{display:"none"}} accept="image/*" ref={imgRef} onChange={e=>{
-                const file = e.target.files[0]
-                const data=new FormData()
-                data.append('image',file)
-                axios.post('/api/upload',data).then(res=>{
-                    axios.post('/api/ad-image',{ad_id:item.id,image:res.data}).then(imgRes=>{
-                        setImages([...images,imgRes.data])
+            <input type="file" multiple style={{display:"none"}} accept="image/*" ref={imgRef} onChange={e=>{
+                const file = e.target.files
+                if(file?.length>0)
+               { const data=new FormData()
+                for (const key of Object.keys(file)) {
+                  data.append('images[]', file[key]);
+              }
+             //   data.append('images[]',file)
+                axios.post('/api/uploads',data).then(res=>{
+                  const newImages=res.data 
+                  
+                  for(let i=0;i<newImages.length;i++)
+                  {
+                    axios.post('/api/ad-image',{ad_id:id,image:res.data[i]}).then(imgRes=>{
+                       
+                      axios.get('/api/ads/'+id).then(res=>{
+                        setBanner(res.data)
+                        setImages(res.data.images)
+                      })
                     })
-                })
+                  }
+                })}
+
             }} />
 
-<input type="file" style={{display:"none"}} ref={mainRef} onChange={e=>{
-                const file = e.target.files[0]
-                const data=new FormData()
-                data.append('image',file)
-                axios.post('/api/upload',data).then(res=>{
-                    axios.post('/api/ad-image',{ad_id:item.id,image:res.data}).then(imgRes=>{
-                        setImages([...images,imgRes.data])
-                    })
-                   // setBanner({...banner,main:res.data})
-                })
-            }} />
+
+<IonLabel position="floating">{t("Emirate")}</IonLabel>
+
+<TextField
+id="outlined-select-currency"
+select
+fullWidth
+variant="outlined"
+defaultValue={banner.city_id}
+onChange={e=>setBanner({...banner,city_id:e.target.value})}
+
+>
+{cities.map((option) => (
+<MenuItem key={option.id} value={option.id}>
+{option['name_'+lang]}
+</MenuItem>
+))}
+</TextField>
 
 <IonLabel>{t("Company name")}</IonLabel>
 <TextField 
@@ -159,23 +180,23 @@ if(!banner?.id)
 
 <IonLabel>{t("Offer Start Date")}</IonLabel>
 <DatePicker 
-         onChange={offer_start_at=>setBanner({...banner,offer_start_at})}
+         onChange={offer_start_at=>setBanner({...banner,offer_start_at:offer_start_at.$d})}
          value={dayjs(banner.offer_start_at)} className="w-100 mb-2" />
 
   <IonLabel>{t("Offer End Date")}</IonLabel>
   <DatePicker 
-         onChange={offer_end_at=>setBanner({...banner,offer_end_at})}
+         onChange={offer_end_at=>setBanner({...banner,offer_end_at:offer_end_at.$d})}
          value={dayjs(banner.offer_end_at)} className="w-100 mb-2" />
 
 
 <IonLabel>{t("Adz publish date starts one")}</IonLabel>
 <DatePicker 
-         onChange={ad_start_at=>setBanner({...banner,ad_start_at})}
+         onChange={ad_start_at=>setBanner({...banner,ad_start_at:ad_start_at.$d})}
          value={dayjs(banner.ad_start_at)} className="w-100 mb-2" />
 
   <IonLabel>{t("Adz publish date ends on")}</IonLabel>
   <DatePicker 
-         onChange={ad_end_at=>setBanner({...banner,ad_end_at})}
+         onChange={ad_end_at=>setBanner({...banner,ad_end_at:ad_end_at.$d})}
          value={dayjs(banner.ad_end_at)} className="w-100 mb-2" />
 
 
@@ -254,24 +275,7 @@ if(!banner?.id)
   value={banner.tiktok}
   onChange={e=>setBanner({...banner,tiktok:e.target.value})}
   variant="outlined" fullWidth />
-<h3>{t("Location")} </h3>
-<IonLabel position="floating">{t("Emirate")}</IonLabel>
 
-<TextField
-id="outlined-select-currency"
-select
-fullWidth
-variant="outlined"
-defaultValue={banner.city_id}
-onChange={e=>setBanner({...banner,city_id:e.target.value})}
-
->
-{cities.map((option) => (
-<MenuItem key={option.id} value={option.id}>
-{option['name_'+lang]}
-</MenuItem>
-))}
-</TextField>
 
 <IonLabel>{t("Location")}</IonLabel>
   <TextField 
@@ -322,7 +326,7 @@ onClick={()=>axios.post("/api/ads",{...banner
   ,ad_start_at:moment(banner.ad_start_at).format("YYYY-MM-DD")
   ,ad_end_at:moment(banner.ad_end_at).format("YYYY-MM-DD")
   ,images}).then(res=>{
-  history.goBack()
+  window.location.replace("/tabs/tab2")
 }).catch(e=>{
 
 })}
