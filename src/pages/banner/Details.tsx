@@ -95,36 +95,52 @@ if(!product?.id)
                 </div>}
                  {product?.id&& <div >
                    {product.facebook&& <IconButton target="_blank" href={product.facebook}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-brand-facebook" width="25" height="25" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3" />
-</svg>
+                   <img src="assets/images/facebook.png" alt="whatsapp" 
+                          style={{width:"25px",height:"25px",objectFit:"contain"}} />
                     </IconButton>}
 
                     {product.instagram&&<IconButton target="_blank" href={product.instagram}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-brand-instagram" width="25" height="25" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M4 4m0 4a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z" />
-  <path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
-  <path d="M16.5 7.5l0 .01" />
-</svg>
+                    <img src="assets/images/instagram.png" alt="whatsapp" 
+                          style={{width:"25px",height:"25px",objectFit:"contain"}} />
                     </IconButton>}
 
                     {product.tiktok&&<IconButton target="_blank" href={product.tiktok}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-brand-tiktok" width="25" height="25" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M21 7.917v4.034a9.948 9.948 0 0 1 -5 -1.951v4.5a6.5 6.5 0 1 1 -8 -6.326v4.326a2.5 2.5 0 1 0 4 2v-11.5h4.083a6.005 6.005 0 0 0 4.917 4.917z" />
-</svg>
+                    <img src="assets/images/tiktok.webp" alt="whatsapp" 
+                          style={{width:"25px",height:"25px",objectFit:"contain"}} />
                     </IconButton>}
 
                    {product.snapchat&& <IconButton target="_blank" href={product.snapchat}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-brand-snapchat" width="25" height="25" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M16.882 7.842a4.882 4.882 0 0 0 -9.764 0c0 4.273 -.213 6.409 -4.118 8.118c2 .882 2 .882 3 3c3 0 4 2 6 2s3 -2 6 -2c1 -2.118 1 -2.118 3 -3c-3.906 -1.709 -4.118 -3.845 -4.118 -8.118zm-13.882 8.119c4 -2.118 4 -4.118 1 -7.118m17 7.118c-4 -2.118 -4 -4.118 -1 -7.118" />
-</svg>
+                   <img src="assets/images/snapchat.png" alt="whatsapp" 
+                          style={{width:"25px",height:"25px",objectFit:"contain"}} />
                     </IconButton>}
+                    <IconButton target="_blank" href={"https://wa.me/971"+(Number(product.whatsapp))}>
+                          <img src="assets/images/whatsapp.png" alt="whatsapp" 
+                          style={{width:"25px",height:"25px",objectFit:"contain"}} />
+           
+                        </IconButton>
+                     {product.location&& <IconButton target="_blank" href={product.location}>
+              <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-map-pin" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+  <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" />
+</svg>
+              </IconButton>}
+                       
+                       
                 </div>}
+
+                
                 <div className="px-2">
+
+                <button style={{display:"flex",justifyContent:"center",alignItems:"center"}}
+                className="btn btn-danger w-100"
+                target="_blank" href={"tel:971"+(Number(product.mobile))}>
+                  {`0${(Number(product.mobile)).toString().slice(0,-2)}xx`}
+                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-phone" width="25" height="25" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#fff" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
+</svg>
+                        </button>
                    
                 <table className="table">
                     <tbody>
@@ -136,6 +152,19 @@ if(!product?.id)
                         <th>{t("Offer End Date")}</th>
                         <td>{product.offer_end_at}</td>
                     </tr>
+                    <tr>
+                      <th>{t("Category")}</th>
+                      <td>
+                      {product.category['name_'+lang]}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>{t("City")}</th>
+                      <td>
+                      {product.city['name_'+lang]}
+                      </td>
+                    </tr>
+
                     </tbody>
                 </table>
                
@@ -174,10 +203,7 @@ if(!product?.id)
 <span className='p-1' style={{overflow:"clip"}}>{item.title} </span>
          </div>)}
 </div> */}
-              
-        </IonContent>
-        <IonFooter>
-          <IonToolbar>
+               {/* <IonToolbar>
             <div slot="start" style={{display:"flex",flexDirection:"row",
             width:"45px",height:"45px",borderRadius:"75px",marginInlineStart:"5px",marginInlineEnd:"5px",
             justifyContent:"center",alignItems:"center",background:"#eee"}}>
@@ -193,30 +219,11 @@ if(!product?.id)
                 
             </div>
             <div slot="end">
-             {product.location&& <IconButton target="_blank" href={product.location}>
-              <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-map-pin" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
-  <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" />
-</svg>
-              </IconButton>}
-                        <IconButton target="_blank" href={"https://wa.me/971"+product.whatsapp}>
-                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-brand-whatsapp" width="25" height="25" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9" />
-  <path d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1" />
-</svg>
-                        </IconButton>
-                        <IconButton target="_blank" href={"tel:971"+product.mobile}>
-                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-phone" width="25" height="25" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
-</svg>
-                        </IconButton>
+            
                     </div>
-          </IonToolbar>
-
-        </IonFooter>
+          </IonToolbar> */}
+        </IonContent>
+        
 
     </IonPage>
 }

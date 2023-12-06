@@ -66,7 +66,7 @@ const Tabs= ()=>{
 </svg>
 {t("My Ads")}
   </IonTabButton>
-  <IonTabButton  tab="create-add" onClick={()=>history.push(token?"/banner/create":"/login")} >
+  {/* <IonTabButton  tab="create-add" onClick={()=>history.push(token?"/banner/create":"/login")} >
   <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-camera-plus" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
   <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
   <path d="M12 20h-7a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2h1a2 2 0 0 0 2 -2a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v3.5" />
@@ -76,7 +76,7 @@ const Tabs= ()=>{
 </svg>
 {t("Create")}
    
-  </IonTabButton>
+  </IonTabButton> */}
   <IonTabButton tab="favorite" href="/tabs/favorite">
   <svg xmlns="http://www.w3.org/2000/svg"  width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
   <path stroke="none" d="M0 0h24v24H0z" fill="none"/>

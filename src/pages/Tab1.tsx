@@ -64,7 +64,7 @@ const productDetails=(item)=>{
   setProduct(item)
   setShowProduct(true)
 }
-
+const token=localStorage.getItem('token');
 const lang=localStorage.getItem('language')||"en"
 if(cities.length==0)
 {
@@ -87,6 +87,11 @@ if(cities.length==0)
       </IonHeader> */}
       <IonContent  className='ion-padding'>
 
+        <button
+        onClick={()=>history.push(token?"/banner/create":"/login")}
+         className='btn btn-danger w-100'>
+          {t("Add a new offer")}
+        </button>
 
 
         {/* <div style={{overflowX:"auto",whiteSpace:"nowrap"}}

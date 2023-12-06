@@ -43,6 +43,8 @@ export const ar={
     "Password Confirmation":"تأكيد كلمة المرور",
     "Thank you for adding offer, Good luck":"نشكرك على الإعلان معنا. نرجو لك الرزق و التوفيق",
     "Go to Home":"الذهاب للرئيسية",
+    "Add a new offer":" إضافة عرض جديد",
+    City:"المدينة",
 
 
 }
