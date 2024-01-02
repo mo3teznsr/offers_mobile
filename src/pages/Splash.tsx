@@ -1,12 +1,19 @@
 import { IonContent, IonPage } from "@ionic/react";
 import { useEffect } from "react";
+import { useHistory } from "react-router";
 
+
+
+const oldUser=localStorage.getItem("oldUser")
 
 
 const Splash=()=>{
+    const history=useHistory()
 useEffect(()=>{
     setTimeout(()=>{
-        window.location.replace('/tabs/home')
+    
+        history.replace("/intro")
+       
     },5000)
 })
 return <IonPage>

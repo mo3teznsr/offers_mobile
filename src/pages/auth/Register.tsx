@@ -29,6 +29,7 @@ const Login=()=>{
 const { t, i18n } = useTranslation();
 const [showPassword,setShowPassword] = useState(false);
 const imgRef=useRef(null)
+const lRef=useRef(null)
 useEffect(()=>{
     axios.get('/api/country').then(res=>{
         
@@ -64,7 +65,7 @@ const history=useHistory()
         </IonHeader>
         <IonContent> <div className="ion-padding" style={{marginTop:"15px"}}>
       
-        <img src={user.image?BASE_URL+'/images/'+user.image:"assets/images/404.jpg"}
+        <img src={register.image?BASE_URL+'/images/'+register.image:"assets/images/404.jpg"}
         onClick={()=>{
             imgRef.current?.click()
         }}
@@ -78,7 +79,7 @@ const history=useHistory()
    data.append('image', file)
    
      axios.post('/api/upload',data).then(res=>{
-        setUser({...user,image:res.data})
+        setRegister({...register,image:res.data})
      })
    //  setAd(oldAd=>({...oldAd,Images:[...images,...imgs]}))
      
@@ -86,10 +87,10 @@ const history=useHistory()
 
 }}  />
         <div>
-        <IonLabel position="stacked">{t("name")} </IonLabel>
+        <IonLabel position="stacked">{t("Company name")} </IonLabel>
         <TextField
         id="input-with-icon-textfield"
-        placeholder={t("name")}
+       
         onChange={e=>setRegister({...register,name:e.target.value})}
         value={register.name}
         InputProps={{
@@ -110,7 +111,45 @@ const history=useHistory()
                  
             
             {errors.name&& <IonNote color="danger">{errors.name[0]} <br/></IonNote>}
+            <IonLabel position="stacked">{t( "Staff authorised to enter Adz")} </IonLabel>
+        <TextField
+        id="input-with-icon-textfield"
+        
+        onChange={e=>setRegister({...register,person:e.target.value})}
+        value={register.person}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+            </InputAdornment>
+          ),
+        }}
+        variant="outlined" fullWidth margin="dense"
+      />
 
+<IonLabel position="stacked">{t( "Private contact number for the company")} </IonLabel>
+        <TextField
+        id="input-with-icon-textfield"
+        
+        onChange={e=>setRegister({...register,person_number:e.target.value})}
+        value={register.person_number}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
+
+</svg>
+            </InputAdornment>
+          ),
+        }}
+        variant="outlined" fullWidth margin="dense"
+      />
            
                 <IonLabel position="stacked">{t("email")} </IonLabel>
                 <TextField
@@ -168,7 +207,7 @@ const history=useHistory()
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-lock" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+             <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-lock" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
   <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
   <path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z" />
   <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" />
@@ -237,8 +276,64 @@ const history=useHistory()
         }}
         variant="outlined" fullWidth margin="dense"
       />
+      <input type="file" accept="image/*" ref={lRef} style={{display:"none"}}
+      onChange={(e)=>{
+ 
+        const file=e.target.files[0]
+        if(file)
+        {
+          const data=new FormData()
+          data.append('image', file)
           
-     <button className="btn btn-danger w-100"
+            axios.post('/api/upload',data).then(res=>{
+               setRegister({...register,license:res.data})
+            })
+          //  setAd(oldAd=>({...oldAd,Images:[...images,...imgs]}))
+            
+        }
+       
+       }} 
+       />
+
+      <span className="">{t("Trade license copy")} </span>
+      <div onClick={()=>lRef.current?.click()}
+      style={{width:"100%",marginBottom:10,marginTop:10,display:"flex",
+      borderRadius:15,border:"1px #c4bdbb solid",padding:10,gap:10}} >
+      <svg xmlns="http://www.w3.org/2000/svg" 
+      className="icon icon-tabler icon-tabler-clipboard-list"
+       width="24" height="24" viewBox="0 0 24 24" 
+       strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
+  <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+  <path d="M9 12l.01 0" />
+  <path d="M13 12l2 0" />
+  <path d="M9 16l.01 0" />
+  <path d="M13 16l2 0" />
+</svg>
+<div style={{flex:1}}>
+  {register.license}
+</div>
+
+<div>
+  {register.license?<svg xmlns="http://www.w3.org/2000/svg" 
+  className="icon icon-tabler icon-tabler-circle-check" width="24" height="24" 
+  viewBox="0 0 24 24" strokeWidth="1.5" stroke="#009988" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+  <path d="M9 12l2 2l4 -4" />
+</svg>:<svg xmlns="http://www.w3.org/2000/svg" 
+className="icon icon-tabler icon-tabler-square-rounded-x" width="24" height="24" viewBox="0 0 24 24"
+ strokeWidth="1.5" stroke="#ff2825" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M10 10l4 4m0 -4l-4 4" />
+  <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
+</svg>}
+</div>
+
+      </div>
+          
+     <button className="btn btn-danger w-100" style={{height:45,borderRadius:20}}
      onClick={()=>{
         setErrors({})
           axios.post('/api/register',register).then(res=>{

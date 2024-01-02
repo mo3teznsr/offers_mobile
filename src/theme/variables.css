@@ -47,13 +47,29 @@ ion-button{
   --border-radius:14px;
 }
 .tab-selected {
+  color: var(--color-selected);
   svg {
     stroke: var(--color-selected);
   };
   
-  color: var(--color-selected);
+  
 }
+ion-content{
+  --background:#fff5f3;
+}
+ion-tab-bar,ion-toolbar {
+  --background:#fee9e6;
+}
+.swiper-pagination {
+  right: 5px;
+  left: unset !important;
+  top: 10px !important;
+  width: 65px !important;
+  background: #999;
+  height: 25px;
+  border-radius: 8px;
 
+}
 /** Ionic CSS Variables **/
 :root {
   --border-radius:14px;
@@ -134,8 +150,16 @@ ion-button{
 
 
 
-html {
+ html,body {
   /* For more information on dynamic font scaling, visit the documentation: 
   https://ionicframework.com/docs/layout/dynamic-font-scaling */
   --ion-dynamic-font: var(--ion-default-dynamic-font);
+  --ion-font-family: 'SF Pro Display', sans-serif;
+  font-family: 'SF Pro Display', sans-serif;
+}
+
+[dir="rtl"] html,body{
+  --ion-font-family: 'Cairo', sans-serif;
+  font-family: 'Cairo', sans-serif;
+  
 }

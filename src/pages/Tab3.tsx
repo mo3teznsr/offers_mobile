@@ -5,6 +5,7 @@ import { informationCircle, logOut, person } from 'ionicons/icons';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { Divider, Drawer } from '@mui/material';
+import { useHistory } from 'react-router';
 
 
 const Tab3: React.FC = () => {
@@ -17,11 +18,12 @@ const Tab3: React.FC = () => {
   }
   const {t}=useTranslation()
   const lang=localStorage.getItem('language')||"en"
+  const history=useHistory()
   return (
     <IonPage>
       <IonContent className='ion-padding'>
         <div className='main-container'>
-        <IonItem lines='none'>
+        <IonItem onClick={()=>history.push("/profile")} lines='none'>
         <svg xmlns="http://www.w3.org/2000/svg" slot="start" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
   <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
   <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />

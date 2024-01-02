@@ -1,22 +1,23 @@
-import { IonButtons, IonChip, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonModal, IonPage, IonSegment, IonSegmentButton, IonSpinner, IonThumbnail, IonTitle, IonToolbar } from '@ionic/react';
+import { IonAvatar, IonButtons, IonChip, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonItem, IonLabel, IonModal, IonPage, IonSearchbar, IonSegment, IonSegmentButton, IonSpinner, IonThumbnail, IonTitle, IonToolbar } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import './Tab1.css';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { close, notifications, search } from 'ionicons/icons';
+import { businessOutline, close, grid, gridOutline, locateOutline, logoWhatsapp, notifications, pricetagOutline, search } from 'ionicons/icons';
 import { BASE_URL } from '../util/cinfig';
 import { MyAds } from './account/ads';
 import { useTranslation } from 'react-i18next';
-import { Navigation, Pagination, Scrollbar, A11y,Autoplay } from 'swiper/modules';
+import { Navigation,Zoom, Pagination, Scrollbar, A11y,Autoplay } from 'swiper/modules';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Product } from '../components/Product';
 import { AdsView } from '../components/Ads';
-import { IconButton } from '@mui/material';
+import { Button, Divider, Drawer, IconButton, Radio } from '@mui/material';
 import { ProductDetails } from './ads/Details';
 import { useHistory } from 'react-router';
-import AdDetails from './banner/Details';
+import AdDetails from './banner/AdDetails';
 import City from './City';
+import Offer from '../components/Offer';
 
 const Tab1: React.FC = (user) => {
 const [ads,setAds]=useState([])
@@ -25,32 +26,44 @@ const [categories,setCategories]=useState([])
 const [banners,setBanners]=useState([])
 const [filters,setFilter]=useState({category:""})
 const [showBanner,setShowBanner]=useState(false)
+
 const [banner,setBanner]=useState({})
 const [product,setProduct]=useState({})
 const [cities,setCities]=useState([])
 const [showProduct,setShowProduct]=useState(false)
-const [city,setCity]=useState({})
+
 const [showCity,setShowCity]=useState(false)
+const [id,setId]=useState(localStorage.getItem("city"))
+const [city,setCity]=useState({})
 
-
+const getData=()=>{
+  axios.get("/api/ads?city_id="+id).then(res=>{
+    setAds(res.data)
+  })
+  axios.get(`/api/city/categories/${id}`).then(res=>setCategories(res.data.filter(item=>item.ads>0)))
+}
 const [show,setShow]=useState('ads')
 useEffect(()=>{
   axios.get('/api/city').then(res=>{
     setCities(res.data)
+    setCity(res.data.find(item=>item.id==id)||{})
   })
-  axios.get("/api/ads").then(res=>{
-    setAds(res.data)
-  })
+getData()
   axios.get('/api/home').then(res=>{
 setBanners(res.data.banners)
 //setAds(res.data.products)
   })
-  axios.get("/api/ads-group").then(res=>{
-    setCategories(res.data)
-}).catch(err=>{
+ 
+//   axios.get("/api/ads-group").then(res=>{
+//    // setCategories(res.data)
+// }).catch(err=>{
 
-})
+// })
 },[])
+
+useEffect(()=>{
+  getData()
+},[id])
 const consent=localStorage.getItem("consent")
 const [showConsent,setShowConsent]=useState(consent?false:true)
 const [ad,setAd]=useState({})
@@ -73,6 +86,7 @@ if(cities.length==0)
     <IonSpinner color="primary" />
   </div>
 }
+const slides=['assets/images/3.webp','assets/images/4.webp']
   return (
     <IonPage>
       {/* <IonHeader>
@@ -80,13 +94,56 @@ if(cities.length==0)
           <img src="assets/images/logo.png" style={{height:40}} />
           <IonButtons slot='end'>
             
-              <IonIcon icon={search} style={{fontSize:24}}  />
-              <IonIcon icon={notifications}  style={{fontSize:24}}  />
+           
             </IonButtons>
         </IonToolbar>
+        
       </IonHeader> */}
       <IonContent  className='ion-padding'>
+        <div style={{display:"flex",gap:10}}>
+        <img src="assets/images/logo.png" style={{width:"100%"}} />
+        
+        </div>
 
+        <button style={{display:"flex",alignItems:"center",justifyContent:"center"}}
+        onClick={()=>setShowCity(true)}
+        className='btn btn-outline-danger w-100 my-2'>
+        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-map-pin-filled" 
+        width="25" height="25" viewBox="0 0 24 24"
+         strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M18.364 4.636a9 9 0 0 1 .203 12.519l-.203 .21l-4.243 4.242a3 3 0 0 1 -4.097 .135l-.144 -.135l-4.244 -4.243a9 9 0 0 1 12.728 -12.728zm-6.364 3.364a3 3 0 1 0 0 6a3 3 0 0 0 0 -6z" stroke-width="0" fill="currentColor" />
+</svg>
+          <strong>{city[`name_${i18n.language}`]}</strong>
+        </button>
+       
+
+        <Swiper className='mb-2'
+            pagination={{
+              type: 'fraction',
+            }}
+     style={{direction:"ltr"}}
+     modules={[ Pagination, Scrollbar, A11y,Autoplay,Zoom]}
+     loop
+     slidesPerView={1}
+     autoplay
+     
+   >
+    {banners?.map(item=> <SwiperSlide key={item}>
+     <img src={BASE_URL+"/images/"+item.image}
+     style={{width:"100%",borderRadius:"15px",height:300}}
+       />
+    </SwiperSlide>)}
+     
+   </Swiper>
+
+        {/* <IonSearchbar></IonSearchbar> */}
+       
+
+        {/* <strong>{t("Welcome to OFFERS123 App")}</strong>
+        <div className="alert alert-danger" role="alert">
+          {t("You can start browsing the amazing offers or add a new one if you have a trade licence.")}
+</div> */}
         <button
         onClick={()=>history.push(token?"/banner/create":"/login")}
          className='btn btn-danger w-100'>
@@ -94,37 +151,101 @@ if(cities.length==0)
         </button>
 
 
-        {/* <div style={{overflowX:"auto",whiteSpace:"nowrap"}}
+       
+        {/* <span>{t("We require your emirates to find the best nearby deals")} </span> */}
+
+        <div style={{display:"flex",justifyContent:"space-between"}} className='my-2' >
+         
+          <span style={{display:"flex",gap:"5px",alignItems:"center"}}>
+            <IonIcon icon={gridOutline} /> <strong>{t("Categories")}</strong>
+          </span>
+          <strong onClick={()=> history.push("/city/"+id)}>{t("View All")}</strong>
+        </div>
+
+         <div style={{overflowX:"auto",whiteSpace:"nowrap"}}
         >
-          {cities.map(item=><div 
+          {categories.filter(item=>item.ads>0).map(item=><div 
           onClick={()=>{
-            setCity(item)
-            setShowCity(true)
+            history.push("/list?category_id="+item.id+"&city_id="+id)
           }}
           style={{display:"inline-block",marginInlineEnd:"10px",borderRadius:"10px"}}
           
            key={item.id}>
             <img src={BASE_URL+"/images/"+item.image} 
             style={{width:"70px",height:"70px",borderRadius:"70px",display:"block",
+            
             margin:"0 auto"
           }}
              />
-             <div style={{width:"100%",textAlign:"center",paddingBottom:"5px"}}>
-              <span style={{textAlign:"center",marginBottom:"5px"}}>{i18n.language=='ar'?item.name_ar:item.name_en}</span>
+             <div style={{textAlign:"center",paddingBottom:"5px"}}>
+              <span style={{textAlign:"center",marginBottom:"5px",wordWrap:"break-word"}}>{i18n.language=='ar'?item.name_ar:item.name_en} ({item.ads}) </span>
              </div>
           </div>)}
-        </div> */}
-        <span>{t("We require your emirates to find the best nearby deals")} </span>
-        {cities.map(item=><IonItem onClick={()=>{
-           history.push("/city/"+item.id)
-        }}>
-          <IonThumbnail slot='start'>
-            <img src={BASE_URL+"/images/"+item.image}  />
-          </IonThumbnail>
+        </div>
+
+        <div style={{display:"flex",justifyContent:"space-between"}} className='my-2' >
+         
+          <span style={{display:"flex",gap:"5px",alignItems:"center"}}>
+            <IonIcon icon={pricetagOutline} /> <strong>{t("New Offers")}</strong>
+          </span>
+         
+        </div>
+
+         <div style={{overflowX:"auto",whiteSpace:"nowrap"}}
+        >
+          {ads.map(item=><div
+          key={item.id}
+           style={{display:"inline-block",marginInlineEnd:"10px",width:"300px",borderRadius:"10px"}}
+          ><Offer item={item}  /></div>)}
+        </div>
+
+
+        {/* <div style={{display:"flex",justifyContent:"space-between"}} className='my-2' >
+         
+         <span style={{display:"flex",gap:"5px",alignItems:"center"}}>
+           <IonIcon icon={businessOutline} /> <strong>{t("Top Companies")}</strong>
+         </span>
+         <strong onClick={()=> history.push("/city/"+id)}>{t("View All")}</strong>
+       </div>
+
+        <div style={{overflowX:"auto",whiteSpace:"nowrap"}}
+       >
+         {categories.map(item=><div 
+         onClick={()=>{
+           setCity(item)
+           setShowCity(true)
+         }}
+         style={{display:"inline-block",marginInlineEnd:"10px",borderRadius:"10px"}}
+         
+          key={item.id}>
+           <img src={BASE_URL+"/images/"+item.image} 
+           style={{width:"70px",height:"70px",borderRadius:"70px",display:"block",
+           margin:"0 auto"
+         }}
+            />
+            <div style={{textAlign:"center",paddingBottom:"5px"}}>
+             <span style={{textAlign:"center",marginBottom:"5px",wordWrap:"break-word"}}>{i18n.language=='ar'?item.name_ar:item.name_en}</span>
+            </div>
+         </div>)}
+       </div> */}
+
+
+      {/* <div className='row mt-2'>
+        {cities.map(item=><div  
+        onClick={()=>{
+          history.push("/city/"+item.id)
+       }}
+        className='col-6 mb-2 text-center'> 
+        <div style={{borderRadius:"10px",border:"1px #eee solid",padding:"5px",width:"100%"}}>
+         
+            <img src={BASE_URL+"/images/"+item.image} style={{width:"100%",height:100,borderRadius:"10px"}}  />
+          
           <IonLabel>
           {i18n.language=='ar'?item.name_ar:item.name_en}
           </IonLabel>
-        </IonItem>)}
+          </div>
+        </div>)}
+        </div> */}
 
         {/* {cities.map(item=><div 
         key={item.id}
@@ -161,7 +282,7 @@ if(cities.length==0)
        
         <div style={{overflowX:"auto",whiteSpace:"nowrap",height:"360px"}}
         >
-        {category.products.map(item=> <div 
+        {category.products.map(item=><div 
          className='shadow'
         onClick={()=>{
           setAd(item)
@@ -184,7 +305,9 @@ if(cities.length==0)
 
           </div>
           </>)} */}
-          <IonModal isOpen={showConsent}>
+         <button className='btn btn-outline-danger w-100'>
+          {t("complaints and suggestions")} <IonIcon icon={logoWhatsapp} />          </button>
+          {/* <IonModal isOpen={showConsent}>
             <IonPage>
               <IonContent className='ion-padding'>
                 <strong   className='text-center d-block w-100'>أهلا بكم</strong>
@@ -253,7 +376,7 @@ if(cities.length==0)
               </IonContent>
             </IonPage>
 
-          </IonModal>
+          </IonModal> */}
 
         
 
@@ -304,7 +427,45 @@ if(cities.length==0)
           </IonPage>
          </IonModal>
 
+         <Drawer
+       dir={lang=="ar"?"rtl":"ltr"}
+       style={{direction:lang=="ar"?"rtl":"ltr"}}
+      anchor="bottom"
+      open={showCity}
+      onClose={()=>setShowCity( false)}
+    >
+    
+     <div className='p-2'
+      style={{direction:lang=="ar"?"rtl":"ltr"}}
+      dir={lang=="ar"?"rtl":"ltr"} >
+     <strong className='text-center'>{t("Emirate")} </strong>
+     <Divider className='my-1' />
+    
+     {cities.map(item=><IonItem  
+       key={item.id}
+     > 
+      <IonAvatar slot="start">
+      <img src={BASE_URL+"/images/"+item.image}   />
+      </IonAvatar>
+         
+          
+          <IonLabel>
+          {i18n.language=='ar'?item.name_ar:item.name_en}
+          </IonLabel>
+          <Radio value={item.id} checked={item.id==id}  onClick={()=>{
+            setId(item.id);
+            setCity(item)
+            localStorage.setItem('city', item.id);
+            setShowCity(false)
+            
+          }} slot="end"></Radio>
+         
+        </IonItem>)}
+
        
+
+     </div>
+    </Drawer>
       
       </IonContent>
     </IonPage>

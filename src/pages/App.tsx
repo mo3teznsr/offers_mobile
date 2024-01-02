@@ -48,7 +48,7 @@ import 'swiper/css/scrollbar';
 import 'swiper/css/autoplay'
 import { ProductDetails } from './pages/ads/Details';
 import City from './pages/City';
-import AdDetails from './pages/banner/AdDetails';
+
 import Splash from './pages/Splash';
 import Tabs from './pages/Tabs';
 import I18n from './i18n';
@@ -63,6 +63,7 @@ import { BannerUpdate } from './pages/banner/Update';
 import Success from './pages/Success';
 import Intro from './pages/intro';
 import Profile from './pages/account/profile';
+import AdDetails from './banner/AdDetails';
 setupIonicReact();
 axios.defaults.baseURL=BASE_URL
 const token=localStorage.getItem('token');

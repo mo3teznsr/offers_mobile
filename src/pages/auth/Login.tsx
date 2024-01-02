@@ -3,6 +3,7 @@ import { IconButton, InputAdornment, TextField } from "@mui/material"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { useHistory } from "react-router"
 
 
 
@@ -41,6 +42,8 @@ useEffect(()=>{
         console.log('Error countries',e.response)
     })
 },[])
+
+const history=useHistory()
 
     return <IonPage><IonContent> <div className="ion-padding" style={{marginTop:"15px"}}>
     
@@ -134,13 +137,14 @@ useEffect(()=>{
               setError(true)
             })
       }}
+      style={{height:45,borderRadius:20}}
           className="btn btn-danger my-2 w-100">
         {t("Login")}
         </button>
 
-        <a href="/register" className="btn btn-outline-danger w-100">
+        <button onClick={()=>history.push("/register")} style={{height:45,borderRadius:20}} className="btn btn-outline-danger w-100">
         {t("SignUp")}
-        </a>
+        </button>
 
 
         </div>:<div>

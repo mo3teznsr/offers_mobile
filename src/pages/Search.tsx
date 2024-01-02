@@ -8,7 +8,7 @@ import { BASE_URL } from "../util/cinfig"
 import { Navigation, Pagination, Scrollbar, A11y,Autoplay } from 'swiper/modules';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
-import AdDetails from "./banner/Details"
+import AdDetails from "./banner/AdDetails"
 
 
 

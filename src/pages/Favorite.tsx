@@ -2,7 +2,7 @@ import { IonContent, IonModal, IonPage } from "@ionic/react"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import AdCard from "../components/AdCard"
-import AdDetails from "./banner/Details"
+import AdDetails from "./banner/AdDetails"
 import { useHistory } from "react-router"
 
 

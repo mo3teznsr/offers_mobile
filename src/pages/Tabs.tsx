@@ -1,6 +1,6 @@
 import { IonApp, IonContent, IonIcon, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs } from "@ionic/react";
 import { Route, useHistory } from "react-router";
-import AdDetails from "./banner/Details";
+import AdDetails from "./banner/AdDetails";
 import Tab1 from "./Tab1";
 import { BannerCreate } from "./banner/Create";
 import Tab2 from "./Tab2";

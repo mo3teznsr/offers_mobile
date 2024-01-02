@@ -1,10 +1,10 @@
-import { IonButton, IonChip, IonContent, IonHeader, IonIcon, IonModal, IonPage, IonTitle, IonToolbar } from "@ionic/react"
-import { Button, Drawer, IconButton, InputAdornment, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField } from "@mui/material"
+import { IonButton, IonChip, IonContent, IonFabButton, IonHeader, IonIcon, IonModal, IonPage, IonTitle, IonToolbar } from "@ionic/react"
+import { Button, Divider, Drawer, IconButton, InputAdornment, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField } from "@mui/material"
 import axios from "axios"
 import { close } from "ionicons/icons"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
-import AdDetails from "./banner/Details"
+import AdDetails from "./banner/AdDetails"
 import { BASE_URL } from "../util/cinfig"
 import { Navigation, Pagination, Scrollbar, A11y,Autoplay } from 'swiper/modules';
 import  MiList from '@mui/material/List';
@@ -51,10 +51,9 @@ const params = Object.fromEntries(urlSearchParams.entries());
     const selectedCity=cities.find(item=>item.id==city)
     const history=useHistory()
     return <IonPage>
-      
-        <IonContent >
-        <IonToolbar>
-                <IconButton onClick={()=>window.history.back()} slot="start">
+      <IonHeader>
+      <IonToolbar>
+                <IconButton onClick={()=>history.goBack()} slot="start">
                 {lang=="en"?<svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-arrow-left" width="32" height="32" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
   <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
   <path d="M5 12l14 0" />
@@ -66,10 +65,10 @@ const params = Object.fromEntries(urlSearchParams.entries());
   <path d="M15 16l4 -4" />
   <path d="M15 8l4 4" />
 </svg>}       </IconButton>
-                {/* <IonTitle>
-                    {t("Search")}
-                </IonTitle> */}
-               <div className="px-2"> 
+                <IonTitle>
+                    {t("Offers")}
+                </IonTitle>
+               {/* <div className="px-2"> 
                <TextField fullWidth margin="dense"
                size="small"
                InputProps={{
@@ -84,10 +83,13 @@ const params = Object.fromEntries(urlSearchParams.entries());
                 ),
                }}
                 />
-               </div>
+               </div> */}
               
             </IonToolbar>
-            <div style={{display:"flex",alignItems:"center",borderBottom:"1px #eee solid",marginBottom:"8px",padding:"15px 0"}}>
+      </IonHeader>
+        <IonContent >
+        
+            {/* <div style={{display:"flex",alignItems:"center",borderBottom:"1px #eee solid",marginBottom:"8px",padding:"15px 0"}}>
                 <div style={{display:"flex",flex:1,justifyContent:"center"}}>
                 
                 <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-arrows-sort mx-2" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
@@ -117,13 +119,13 @@ const params = Object.fromEntries(urlSearchParams.entries());
                 </div>
                
 
-            </div>
+            </div> */}
         
 
-            {(selectedCategory||selectedCity)&&<div
+            {/* {(selectedCategory||selectedCity)&&<div
             style={{display:"flex",padding:"10px",height:"35px",alignItems:"center"}}>
                {(selectedCategory||selectedCity)&& <IconButton onClick={()=>{
-                    setCity("")
+                 //   setCity("")
                     setCategory("")
                 }}>
             <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-trash" width="32" height="32" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
@@ -143,10 +145,10 @@ const params = Object.fromEntries(urlSearchParams.entries());
                     setCity("")
                 }}
                 ><IonIcon className="mx-1"  icon={close}></IonIcon> {selectedCity['name_'+lang]}  </IonChip>}
-            </div>}
+            </div>} */}
 
             <div className="p-2">
-            {ads?.map(item=> <div className='shadow rounded-lg mb-2'
+            {ads?.map(item=> <div className='shadow bg-white rounded-lg mb-2'
         onClick={()=>{
           history.push("/ad/"+item.id)
         }}
@@ -156,12 +158,14 @@ const params = Object.fromEntries(urlSearchParams.entries());
           <div className="rounded-lg" style={{display:"block"}}>
          
           <Swiper
-     
+     pagination={{
+      type: 'fraction',
+    }}
      modules={[ Pagination, Scrollbar, A11y,Autoplay]}
      loop
      slidesPerView={1}
      
-     pagination={{ clickable: true }}
+     
    >
     {item.images?.length>0?item.images.map(img=> <SwiperSlide key={img.id}>
      <img src={BASE_URL+"/images/"+img.image}
@@ -176,55 +180,121 @@ const params = Object.fromEntries(urlSearchParams.entries());
 <div >
 
   <div className="px-2" style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-<span style={{fontWeight:"bold"}}>{item.title} </span>
+<span style={{fontWeight:"bold"}}>{lang==="ar"? item.title:item.title_en} </span>
+<div style={{left:"3px",top:"5px",display:"flex",flexDirection:"column",position:"absolute",zIndex:10}}>
 
-<div slot="end">
+{item.facebook&& <IonFabButton size="small" color="light" target="_blank" href={item.facebook}>
+<img src="assets/images/facebook.png" alt="whatsapp" 
+       style={{width:"25px",height:"25px",objectFit:"contain"}} />
+ </IonFabButton>}
+
+ {item.instagram&&<IonFabButton size="small" color="light"  target="_blank" href={item.instagram}>
+ <img src="assets/images/instagram.png" alt="whatsapp" 
+       style={{width:"25px",height:"25px",objectFit:"contain"}} />
+ </IonFabButton>}
+
+ {item.tiktok&&<IonFabButton size="small" color="light"  target="_blank" href={item.tiktok}>
+ <img src="assets/images/tiktok.webp" alt="whatsapp" 
+       style={{width:"25px",height:"25px",objectFit:"contain"}} />
+ </IonFabButton>}
+
+{item.snapchat&& <IonFabButton size="small" color="light"  target="_blank" href={item.snapchat}>
+<img src="assets/images/snapchat.png" alt="whatsapp" 
+       style={{width:"25px",height:"25px",objectFit:"contain"}} />
+ </IonFabButton>}
+
+     <IonFabButton size="small" color="light"  target="_blank" href={"https://wa.me/971"+item.whatsapp}>
+     <img src="assets/images/whatsapp.png" alt="whatsapp" 
+       style={{width:"25px",height:"25px",objectFit:"contain"}} />
+     </IonFabButton>
+     {item.website&& <IonFabButton size="small" color="light"  
+      onClick={()=>{
+        
+       window.open(item.website.startsWith('http')?item.website:"http://"+item.website)
+     }}
+     >
+     <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-brand-snapchat" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+
+<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+<path d="M19.5 7a9 9 0 0 0 -7.5 -4a8.991 8.991 0 0 0 -7.484 4" />
+<path d="M11.5 3a16.989 16.989 0 0 0 -1.826 4" />
+<path d="M12.5 3a16.989 16.989 0 0 1 1.828 4" />
+<path d="M19.5 17a9 9 0 0 1 -7.5 4a8.991 8.991 0 0 1 -7.484 -4" />
+<path d="M11.5 21a16.989 16.989 0 0 1 -1.826 -4" />
+<path d="M12.5 21a16.989 16.989 0 0 0 1.828 -4" />
+<path d="M2 10l1 4l1.5 -4l1.5 4l1 -4" />
+<path d="M17 10l1 4l1.5 -4l1.5 4l1 -4" />
+<path d="M9.5 10l1 4l1.5 -4l1.5 4l1 -4" />
+
+</svg>
+ </IonFabButton>}
+  
+     <IonFabButton size="small" color="light"  target="_blank" href={"tel:971"+item.mobile}>
+     <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-phone" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
+<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+<path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
+</svg>
+     </IonFabButton>
+ </div>
+
+{/* <div slot="end">
 
                    {item.facebook&& <IconButton target="_blank" href={item.facebook}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-brand-facebook" width="25" height="25" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3" />
-</svg>
+                   <img src="assets/images/facebook.png" alt="whatsapp" 
+                          style={{width:"25px",height:"25px",objectFit:"contain"}} />
                     </IconButton>}
 
                     {item.instagram&&<IconButton target="_blank" href={item.instagram}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-brand-instagram" width="25" height="25" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M4 4m0 4a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z" />
-  <path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
-  <path d="M16.5 7.5l0 .01" />
-</svg>
+                    <img src="assets/images/instagram.png" alt="whatsapp" 
+                          style={{width:"25px",height:"25px",objectFit:"contain"}} />
                     </IconButton>}
 
                     {item.tiktok&&<IconButton target="_blank" href={item.tiktok}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-brand-tiktok" width="25" height="25" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M21 7.917v4.034a9.948 9.948 0 0 1 -5 -1.951v4.5a6.5 6.5 0 1 1 -8 -6.326v4.326a2.5 2.5 0 1 0 4 2v-11.5h4.083a6.005 6.005 0 0 0 4.917 4.917z" />
-</svg>
+                    <img src="assets/images/tiktok.webp" alt="whatsapp" 
+                          style={{width:"25px",height:"25px",objectFit:"contain"}} />
                     </IconButton>}
 
                    {item.snapchat&& <IconButton target="_blank" href={item.snapchat}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-brand-snapchat" width="25" height="25" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M16.882 7.842a4.882 4.882 0 0 0 -9.764 0c0 4.273 -.213 6.409 -4.118 8.118c2 .882 2 .882 3 3c3 0 4 2 6 2s3 -2 6 -2c1 -2.118 1 -2.118 3 -3c-3.906 -1.709 -4.118 -3.845 -4.118 -8.118zm-13.882 8.119c4 -2.118 4 -4.118 1 -7.118m17 7.118c-4 -2.118 -4 -4.118 -1 -7.118" />
-</svg>
+                   <img src="assets/images/snapchat.png" alt="whatsapp" 
+                          style={{width:"25px",height:"25px",objectFit:"contain"}} />
                     </IconButton>}
                 
                         <IconButton target="_blank" href={"https://wa.me/971"+item.whatsapp}>
-                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-brand-whatsapp" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9" />
-  <path d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1" />
-</svg>
+                        <img src="assets/images/whatsapp.png" alt="whatsapp" 
+                          style={{width:"25px",height:"25px",objectFit:"contain"}} />
                         </IconButton>
+                        {item.website&& <IconButton 
+                         onClick={()=>{
+                          window.open(item.website)
+                        }}
+                        >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-brand-snapchat" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+
+<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+<path d="M19.5 7a9 9 0 0 0 -7.5 -4a8.991 8.991 0 0 0 -7.484 4" />
+<path d="M11.5 3a16.989 16.989 0 0 0 -1.826 4" />
+<path d="M12.5 3a16.989 16.989 0 0 1 1.828 4" />
+<path d="M19.5 17a9 9 0 0 1 -7.5 4a8.991 8.991 0 0 1 -7.484 -4" />
+<path d="M11.5 21a16.989 16.989 0 0 1 -1.826 -4" />
+<path d="M12.5 21a16.989 16.989 0 0 0 1.828 -4" />
+<path d="M2 10l1 4l1.5 -4l1.5 4l1 -4" />
+<path d="M17 10l1 4l1.5 -4l1.5 4l1 -4" />
+<path d="M9.5 10l1 4l1.5 -4l1.5 4l1 -4" />
+
+</svg>
+                    </IconButton>}
+                     
                         <IconButton target="_blank" href={"tel:971"+item.mobile}>
                         <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-phone" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
   <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
   <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
 </svg>
                         </IconButton>
-                    </div>
+                    </div> */}
     </div>
+    <div className="p-2" >
+<button className="btn btn-danger w-100">{t("Offer Details")}</button>
+      </div>
 
   </div>
   </div>

@@ -6,7 +6,7 @@ import { useHistory, useParams } from "react-router"
 import { BASE_URL } from "../util/cinfig"
 import { IconButton } from "@mui/material"
 import Search from "./Search"
-import AdDetails from "./banner/Details"
+import AdDetails from "./banner/AdDetails"
 import { Link } from "react-router-dom"
 import Loading from "../components/Loading"
 
@@ -70,6 +70,10 @@ const City=()=>{
             </IonToolbar>
         </IonHeader>
         <IonContent className="ion-padding" >
+        <div style={{display:"flex",gap:10}}>
+        <img src="assets/images/logo.png" style={{width:"100%"}} />
+        
+        </div>
            {categories.length>0&& <h3>{t("Categories")}</h3>}
            {city?.id&&categories.length===0&&<div className="w-100 text-center">
                 <img src="assets/images/empty.png" 
@@ -84,8 +88,8 @@ const City=()=>{
             {categories.filter(item=>item.categoryId==0).map(item=><a 
             key={item.id}
             style={{textDecoration:"none"}}
-            href={"/list?category_id="+item.id+"&city_id="+city.id}><div
-            style={{borderRadius:"10px",}}
+            onClick={()=>history.push("/list?category_id="+item.id+"&city_id="+city.id)}><div
+            style={{borderRadius:"10px",textAlign:"center"}}
             
             key={item.id} onClick={()=>{
                 setCategory(item)
@@ -100,7 +104,8 @@ const City=()=>{
                     padding:"5px"
 
                     }}
-                    >{item['name_'+lang]}</span>
+                    >{item['name_'+lang]} ({item.ads})</span>
+                  
             </div></a>)}
             </div>
             {/* {   categories1.map(category=> category.products.length>0&& <>
@@ -136,13 +141,9 @@ const City=()=>{
           </div>
           </>)} */}
 
-          <IonModal isOpen={showProduct}>
-            <AdDetails product={ad} setAd={setAd} close={()=>setShowProduct(false)} />
-          </IonModal>
+        
 
-            <IonModal isOpen={isPend}>
-<Search city={city} category={category} close={()=>setOpen(false)} />
-</IonModal>
+           
         </IonContent>
     </IonPage>
    

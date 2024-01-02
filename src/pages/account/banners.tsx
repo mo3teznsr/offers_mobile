@@ -70,7 +70,7 @@ useEffect(()=>{
             color={filters.status_id===item.id?"primary":""}
              key={item.id} onClick={()=>setFilter({...filters,status_id:item.id})}>{item['name_'+(i18n.language||'en')]}</IonChip>)}
         </div> */}
-        {products.filter(item=>item.title.indexOf(filters.search)>-1).map((product)=><div
+        {products.filter(item=>item.title?.toString().indexOf(filters.search)>-1).map((product)=><div
          
          className="ad-container"
          key={product.id}  onClick={()=>history.push("/banner/update/"+product.id)}
@@ -83,7 +83,9 @@ useEffect(()=>{
      loop
      slidesPerView={1}
      
-     pagination={{ clickable: true }}
+     pagination={{
+        type: 'fraction',
+      }}
    >
     {product.images?.length>0?product.images.map(item=> <SwiperSlide key={item.id}>
      <img src={BASE_URL+"/images/"+item.image}
@@ -103,12 +105,6 @@ useEffect(()=>{
 
         
 
-        <IonModal isOpen={showModal}>
-            <BannerUpdate item={product} close={()=>{
-                setModal(false)
-                getProducts()
-                }}  />
-
-        </IonModal>
+       
     </div>
 }
