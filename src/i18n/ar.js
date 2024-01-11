@@ -83,7 +83,19 @@ export const ar={
     "Starts on":"يبدأ من",
     "Ends on":"ينتهي في",
     "Offer youtube video":"رابط فيديو الاعلان على اليوتيوب",
-    "You have to upload copy of your trade license":"يجب ارفاق نسخة من الرخصة التجارية"
+    "You have to upload copy of your trade license":"يجب ارفاق نسخة من الرخصة التجارية"  ,
+    "Discount Type":"نوع الخصم",
+    "Discount starts from":"الخصم يبدأ من",
+    "Discount ends to":"الخصم يصل الي",
+    "AED":"د.إ",
+    "Persentage":"نسبة المئوية",
+    "Amount":"قيمة",
+    "Notes":"الملاحظات",
+    "Notes (Arabic)":"الملاحظات (عربي)",
+    "Notes (English)":"الملاحظات (إنجليزي)",
+    "on all items / services":" على كل المنتجات / الخدمات",
+    "On some items / services":"على بعض المنتجات / الخدمات",
+    "Discount value/ percentage":"نسبة / قيمة الخصم",
 
 
 }

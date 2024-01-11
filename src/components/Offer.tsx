@@ -16,27 +16,27 @@ const Offer=({item}:any)=>{
     const lang=localStorage.getItem('language')||"en"
     return <div>
         <div className='shadow bg-white rounded-lg mb-2'
-        onClick={()=>{
-          history.push("/ad/"+item.id)
-        }}
-        style={{display:"inline-block",
+        
+        style={{display:"inline-block",zIndex:-2,
         width:"100%",marginInlineEnd:"10px",position:"relative",borderRadius:"10px"}}
         key={item.id}>
             
-          <div className="rounded-lg" style={{display:"block"}}>
+          <div className="rounded-lg" style={{display:"block",background:"#fff0"}}>
          
-          <Swiper
+          <Swiper 
      pagination={{
       type: 'fraction',
-    }}
-     modules={[ Pagination, Scrollbar, A11y,Autoplay]}
+    }} noSwiping={true} noSwipingClass="swiper-no-swiping"
+     modules={[ Navigation,Pagination, A11y,Autoplay]} 
      loop
      autoplay
-     style={{direction:"ltr"}}
+     style={{direction:"ltr",zIndex:-1}}
      
    >
     {item.images?.length>0?item.images.map(img=> <SwiperSlide key={img.id}>
-     <img src={BASE_URL+"/images/"+img.image}
+     <img src={BASE_URL+"/images/"+img.image} onClick={()=>{
+          history.push("/ad/"+item.id)
+        }}
      style={{width:"100%",height:"350px",borderRadius:"10px"}}
        />
     </SwiperSlide>):<img src="assets/images/404.jpg"  style={{width:"100%",height:"230px"}} />}
@@ -45,7 +45,9 @@ const Offer=({item}:any)=>{
 
    
  <div >
- <div style={{left:"3px",top:"5px",display:"flex",flexDirection:"column",position:"absolute",zIndex:10}}>
+ <div onClick={()=>{
+          history.push("/ad/"+item.id)
+        }} style={{left:"3px",top:"5px",display:"flex",flexDirection:"column",position:"absolute",zIndex:10}}>
 
 {item.facebook&& <IonFabButton size="small" color="light" target="_blank" href={item.facebook}>
 <img src="assets/images/facebook.png" alt="whatsapp" 
@@ -105,7 +107,10 @@ const Offer=({item}:any)=>{
   <div className="px-2" style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
 <span style={{fontWeight:"bold"}}>{lang==="ar"? item.title:item.title_en} </span>
 
+<span>
+ {item.discount_amount} 
 
+</span>
     </div>
     <div className="p-2" >
 <button className="btn btn-danger w-100">{t("Offer Details")}</button>

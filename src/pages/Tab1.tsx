@@ -118,7 +118,7 @@ const slides=['assets/images/3.webp','assets/images/4.webp']
         </button>
        
 
-        <Swiper className='mb-2'
+        {/* <Swiper className='mb-2'
             pagination={{
               type: 'fraction',
             }}
@@ -135,7 +135,7 @@ const slides=['assets/images/3.webp','assets/images/4.webp']
        />
     </SwiperSlide>)}
      
-   </Swiper>
+   </Swiper> */}
 
         {/* <IonSearchbar></IonSearchbar> */}
        

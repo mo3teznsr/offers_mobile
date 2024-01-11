@@ -88,7 +88,10 @@ const params = Object.fromEntries(urlSearchParams.entries());
             </IonToolbar>
       </IonHeader>
         <IonContent >
+        <div style={{display:"flex",gap:10,marginTop:"10px"}}>
+        <img src="assets/images/logo.png" style={{width:"100%"}} />
         
+        </div>
             {/* <div style={{display:"flex",alignItems:"center",borderBottom:"1px #eee solid",marginBottom:"8px",padding:"15px 0"}}>
                 <div style={{display:"flex",flex:1,justifyContent:"center"}}>
                 
@@ -181,6 +184,10 @@ const params = Object.fromEntries(urlSearchParams.entries());
 
   <div className="px-2" style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
 <span style={{fontWeight:"bold"}}>{lang==="ar"? item.title:item.title_en} </span>
+<span>
+{item.discount_amount} 
+
+</span>
 <div style={{left:"3px",top:"5px",display:"flex",flexDirection:"column",position:"absolute",zIndex:10}}>
 
 {item.facebook&& <IonFabButton size="small" color="light" target="_blank" href={item.facebook}>

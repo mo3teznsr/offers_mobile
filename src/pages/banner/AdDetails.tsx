@@ -85,6 +85,7 @@ if(!product?.id)
         </IonToolbar>
       </IonHeader>
         <IonContent>
+          
             <div style={{position:"relative",padding:".5rem",}}>
             <div style={{display:"flex",gap:10}}>
         <img src="assets/images/logo.png" style={{width:"100%"}} />
@@ -124,7 +125,7 @@ if(!product?.id)
    >
     {product?.images?.length>0?product?.images?.map(item=> <SwiperSlide key={item.id}>
      <img src={BASE_URL+"/images/"+item.image}
-     style={{width:"100%",height:"480px"}}
+     style={{width:"100%",height:"350px"}}
        />
     </SwiperSlide>):<img src="assets/images/404.jpg"  style={{width:"100%",height:"230px"}} />}
      
@@ -215,9 +216,20 @@ if(!product?.id)
   <path d="M8.7 13.3l6.6 3.4" />
 </svg> {t("Sahre")} 
                         </button>
-                   
+                   <div>
+                    <h4>{t("Notes")}</h4>
+                    <p className="my-1">{product[`note_${i18n.language}`]}</p>
+                   </div>
                 <table className="table" style={{marginTop:"10px",borderRadius:"10px",padding:"10px"}}>
                     <tbody>
+                      <tr>
+                        <th>{t("Discount Type")}</th>
+                        <td>{product.discount_type}</td>
+                      </tr>
+                      <tr>
+                        <th>{t("Discount value/ percentage")}</th>
+                        <td>{product.discount_amount}</td>
+                      </tr>
                     <tr>
                         <th>{t("Offer Start Date")}</th>
                         <td>{product.offer_start_at}</td>

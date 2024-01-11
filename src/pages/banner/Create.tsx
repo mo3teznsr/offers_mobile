@@ -21,7 +21,8 @@ const [cities, setCities]=useState([])
 const [showConsent,setConsent]=useState(true)
 const [showImageLimit,setShowImageLimit]=useState(false)
 const [areas, setAreas]=useState([])
-const [banner,setBanner]=useState({country_id:1,mobile:"", lat: 24.2041721, lng: 55.272619})
+const [banner,setBanner]=useState({country_id:1,mobile:"",
+ lat: 24.2041721, lng: 55.272619,discount_type:"persentage",discount_from:0,discount_to:50})
 const {t,i18n}=useTranslation()
 const imgRef=useRef(null)
 const mainRef=useRef(null)
@@ -109,30 +110,7 @@ useEffect(()=>{
             }} />
 
 
-        <IonLabel>{t("Offer Start Date")}</IonLabel>
-        <DatePicker 
-         onChange={offer_start_at=>setBanner({...banner,offer_start_at:offer_start_at.$d,ad_start_at:offer_start_at.$d})}
-         value={dayjs(banner.offer_start_at)} className="w-100 mb-2" />
-
-          <IonLabel>{t("Offer End Date")}</IonLabel>
-          <DatePicker minDate={dayjs(banner.offer_start_at).add(1,'day')} 
-         onChange={offer_end_at=>setBanner({...banner,offer_end_at:offer_end_at.$d,ad_end_at:offer_end_at.$d})}
-         value={dayjs(banner.offer_end_at)} className="w-100 mb-2" />
-      
-
-<IonLabel>{t("Adz publish date starts on")}</IonLabel>
-<DatePicker 
- maxDate={dayjs(banner.offer_end_at)}
-         onChange={ad_start_at=>setBanner({...banner,ad_start_at:ad_start_at.$d})}
-         value={dayjs(banner.ad_start_at)} className="w-100 mb-2" />
-       
-          <IonLabel>{t("Adz publish date ends on")}</IonLabel>
-          <DatePicker 
-          minDate={dayjs(banner.ad_start_at).add(1, 'day')}
-          maxDate={dayjs(banner.offer_end_at)}
-         onChange={ad_end_at=>setBanner({...banner,ad_end_at:ad_end_at.$d})}
-         value={dayjs(banner.ad_end_at)} className="w-100 mb-2" />
-
+     
 
 <IonLabel position="floating">{t("Emirate")}</IonLabel>
         
@@ -208,6 +186,156 @@ useEffect(()=>{
             </MenuItem>
           ))}
         </TextField>
+
+        <IonLabel position="floating">{t("Discount Type")}</IonLabel>
+        
+                <TextField
+          id="outlined-select-currency"
+          select
+          fullWidth
+          variant="outlined"
+          defaultValue={banner.discount_type}
+          onChange={e=>setBanner({...banner,discount_type:e.target.value})}
+        
+        >
+          
+            <MenuItem  value="On some items / services ">
+              {t("On some items / services ")}
+            </MenuItem>
+            <MenuItem  value="on all items / services ">
+              {t("on all items / services ")}
+            </MenuItem>
+          
+        </TextField>
+        <IonLabel position="floating">{t("Discount value/ percentage")}</IonLabel>
+        
+        <TextField
+  id="outlined-select-currency"
+  select
+  fullWidth
+  variant="outlined"
+  defaultValue={banner.discount_amount}
+  onChange={e=>setBanner({...banner,discount_amount:e.target.value})}
+
+>
+  
+<MenuItem  value="15% ">15%</MenuItem>
+<MenuItem  value="15% ">20%</MenuItem>
+<MenuItem  value="15% ">25%</MenuItem>
+<MenuItem  value="15% ">30%</MenuItem> 
+<MenuItem  value="15% ">40%</MenuItem>
+<MenuItem  value="15% ">50%</MenuItem>       
+<MenuItem  value="15% ">60%</MenuItem>
+<MenuItem  value="15% ">75%</MenuItem>
+<MenuItem  value="15% ">15 to 25 %</MenuItem>
+<MenuItem  value="15% ">15 to 35 %</MenuItem> 
+<MenuItem  value="15% ">20 to 35 %</MenuItem>
+<MenuItem  value="15% ">20 to 50 %</MenuItem>  
+<MenuItem  value="15% ">25 to 35 %</MenuItem>
+<MenuItem  value="15% ">25 to 50 %</MenuItem>
+<MenuItem  value="15% ">30 to 50 %</MenuItem>
+<MenuItem  value="15% ">30 to 75 %</MenuItem> 
+<MenuItem  value="15% ">500 to 1000 AED</MenuItem>
+<MenuItem  value="15% ">500 to 1500 AED</MenuItem>
+<MenuItem  value="15% ">750 to 1500 AED</MenuItem>   
+<MenuItem  value="15% ">1000 to 2000 AED</MenuItem> 
+  
+</TextField>
+
+        {/* <div style={{display:"flex",gap:"10px"}}>
+          <div>
+          <IonLabel>{t("Discount starts from")}</IonLabel>
+        <TextField 
+          onChange={e=>setBanner({...banner,discount_from:e.target.value})} 
+          value={banner.discount_from}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+              {banner.discount_type==="persentage"?<svg xmlns="http://www.w3.org/2000/svg" 
+               width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 15l6 -6" />
+  <circle cx="9.5" cy="9.5" r=".5" fill="currentColor" />
+  <circle cx="14.5" cy="14.5" r=".5" fill="currentColor" />
+  <path d="M5 7.2a2.2 2.2 0 0 1 2.2 -2.2h1a2.2 2.2 0 0 0 1.55 -.64l.7 -.7a2.2 2.2 0 0 1 3.12 0l.7 .7a2.2 2.2 0 0 0 1.55 .64h1a2.2 2.2 0 0 1 2.2 2.2v1a2.2 2.2 0 0 0 .64 1.55l.7 .7a2.2 2.2 0 0 1 0 3.12l-.7 .7a2.2 2.2 0 0 0 -.64 1.55v1a2.2 2.2 0 0 1 -2.2 2.2h-1a2.2 2.2 0 0 0 -1.55 .64l-.7 .7a2.2 2.2 0 0 1 -3.12 0l-.7 -.7a2.2 2.2 0 0 0 -1.55 -.64h-1a2.2 2.2 0 0 1 -2.2 -2.2v-1a2.2 2.2 0 0 0 -.64 -1.55l-.7 -.7a2.2 2.2 0 0 1 0 -3.12l.7 -.7a2.2 2.2 0 0 0 .64 -1.55v-1" />
+</svg>:t("AED")}
+              </InputAdornment>
+            )}}
+
+         type="number"
+          variant="outlined" fullWidth margin="dense"
+           />
+
+          </div>
+
+          <div>
+          <IonLabel>{t("Discount ends to")}</IonLabel>
+        <TextField 
+          onChange={e=>setBanner({...banner,discount_to:e.target.value})} 
+          value={banner.discount_to}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+              {banner.discount_type==="persentage"?<svg xmlns="http://www.w3.org/2000/svg" 
+               width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#000000" fill="none" strokeLinecap="round" strokeLinejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 15l6 -6" />
+  <circle cx="9.5" cy="9.5" r=".5" fill="currentColor" />
+  <circle cx="14.5" cy="14.5" r=".5" fill="currentColor" />
+  <path d="M5 7.2a2.2 2.2 0 0 1 2.2 -2.2h1a2.2 2.2 0 0 0 1.55 -.64l.7 -.7a2.2 2.2 0 0 1 3.12 0l.7 .7a2.2 2.2 0 0 0 1.55 .64h1a2.2 2.2 0 0 1 2.2 2.2v1a2.2 2.2 0 0 0 .64 1.55l.7 .7a2.2 2.2 0 0 1 0 3.12l-.7 .7a2.2 2.2 0 0 0 -.64 1.55v1a2.2 2.2 0 0 1 -2.2 2.2h-1a2.2 2.2 0 0 0 -1.55 .64l-.7 .7a2.2 2.2 0 0 1 -3.12 0l-.7 -.7a2.2 2.2 0 0 0 -1.55 -.64h-1a2.2 2.2 0 0 1 -2.2 -2.2v-1a2.2 2.2 0 0 0 -.64 -1.55l-.7 -.7a2.2 2.2 0 0 1 0 -3.12l.7 -.7a2.2 2.2 0 0 0 .64 -1.55v-1" />
+</svg>:t("AED")}
+              </InputAdornment>
+            )}}
+
+         type="number"
+          variant="outlined" fullWidth margin="dense"
+           />
+
+          </div>
+        </div> */}
+        <IonLabel>{t("Notes (Arabic)")}</IonLabel>
+        <TextField 
+  value={banner.note_ar}
+
+
+  onChange={e=>setBanner({...banner,note_ar:e.target.value})}
+  variant="outlined" fullWidth margin="dense"
+   />
+
+<IonLabel>{t("Notes (English)")}</IonLabel>
+        <TextField 
+  value={banner.note_en}
+
+
+  onChange={e=>setBanner({...banner,note_en:e.target.value})}
+  variant="outlined" fullWidth margin="dense"
+   />
+        
+
+        <IonLabel>{t("Offer Start Date")}</IonLabel>
+        <DatePicker 
+         onChange={offer_start_at=>setBanner({...banner,offer_start_at:offer_start_at.$d,ad_start_at:offer_start_at.$d})}
+         value={dayjs(banner.offer_start_at)} className="w-100 mb-2" />
+
+          <IonLabel>{t("Offer End Date")}</IonLabel>
+          <DatePicker minDate={dayjs(banner.offer_start_at).add(1,'day')} 
+         onChange={offer_end_at=>setBanner({...banner,offer_end_at:offer_end_at.$d,ad_end_at:offer_end_at.$d})}
+         value={dayjs(banner.offer_end_at)} className="w-100 mb-2" />
+      
+
+<IonLabel>{t("Adz publish date starts on")}</IonLabel>
+<DatePicker 
+ maxDate={dayjs(banner.offer_end_at)}
+         onChange={ad_start_at=>setBanner({...banner,ad_start_at:ad_start_at.$d})}
+         value={dayjs(banner.ad_start_at)} className="w-100 mb-2" />
+       
+          <IonLabel>{t("Adz publish date ends on")}</IonLabel>
+          <DatePicker 
+          minDate={dayjs(banner.ad_start_at).add(1, 'day')}
+          maxDate={dayjs(banner.offer_end_at)}
+         onChange={ad_end_at=>setBanner({...banner,ad_end_at:ad_end_at.$d})}
+         value={dayjs(banner.ad_end_at)} className="w-100 mb-2" />
+
 
         <IonLabel>{t("Mobile")}</IonLabel>
         <TextField 
@@ -512,7 +640,7 @@ onClick={()=>{
   
   })
 }}
-disabled={!(banner.city_id&&banner.category_id&&banner.mobile&&images.length>0)}
+disabled={!(banner.city_id&&banner.license&&banner.category_id&&banner.mobile&&images.length>0&&banner.offer_start_at!==banner.offer_end_at&&banner.ad_start_at!==banner.ad_end_at)}
 >{t("Save")} </IonButton>
 
 <Drawer
